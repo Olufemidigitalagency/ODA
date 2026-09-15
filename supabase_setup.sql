@@ -61,11 +61,16 @@ CREATE TABLE IF NOT EXISTS public.projects (
     client_name VARCHAR(255),
     year VARCHAR(10) DEFAULT '2025',
     image_url TEXT NOT NULL,
+    gallery_images TEXT[] DEFAULT '{}',
+    video_url TEXT,
     tags TEXT[] DEFAULT '{}',
     featured BOOLEAN DEFAULT false,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS gallery_images TEXT[] DEFAULT '{}';
+ALTER TABLE public.projects ADD COLUMN IF NOT EXISTS video_url TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_projects_category ON public.projects(category);
 CREATE INDEX IF NOT EXISTS idx_projects_featured ON public.projects(featured);

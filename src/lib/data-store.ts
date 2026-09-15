@@ -26,6 +26,12 @@ export const INITIAL_PROJECTS: Project[] = [
     client_name: 'Maison Noir',
     year: '2025',
     image_url: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=1600&auto=format&fit=crop',
+    gallery_images: [
+      'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1600&auto=format&fit=crop'
+    ],
     tags: ['Brand Photography', 'Editorial Portraits', 'Commercial'],
     featured: true
   },
@@ -38,6 +44,12 @@ export const INITIAL_PROJECTS: Project[] = [
     client_name: 'Vortex Global',
     year: '2025',
     image_url: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1600&auto=format&fit=crop',
+    gallery_images: [
+      'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?q=80&w=1600&auto=format&fit=crop'
+    ],
+    video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     tags: ['Event Highlights', 'Talking Head', 'Videography'],
     featured: true
   },
@@ -50,6 +62,10 @@ export const INITIAL_PROJECTS: Project[] = [
     client_name: 'Nebula Labs',
     year: '2025',
     image_url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop',
+    gallery_images: [
+      'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1600&auto=format&fit=crop'
+    ],
     tags: ['Graphic Design', 'Flyers', 'Presentation Deck'],
     featured: true
   },
@@ -62,6 +78,10 @@ export const INITIAL_PROJECTS: Project[] = [
     client_name: 'Chronos Watchmakers',
     year: '2024',
     image_url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1600&auto=format&fit=crop',
+    gallery_images: [
+      'https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1600&auto=format&fit=crop'
+    ],
+    video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     tags: ['Behind The Scenes', 'Social Media Video', 'Promotional'],
     featured: false
   },
@@ -74,6 +94,10 @@ export const INITIAL_PROJECTS: Project[] = [
     client_name: 'Aura Beauty',
     year: '2024',
     image_url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop',
+    gallery_images: [
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1600&auto=format&fit=crop'
+    ],
     tags: ['Product Photography', 'E-Commerce', 'Commercial'],
     featured: true
   },
@@ -86,6 +110,9 @@ export const INITIAL_PROJECTS: Project[] = [
     client_name: 'Synthesis Media',
     year: '2025',
     image_url: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1600&auto=format&fit=crop',
+    gallery_images: [
+      'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1600&auto=format&fit=crop'
+    ],
     tags: ['Carousel Design', 'Social Media', 'Flyers'],
     featured: false
   }

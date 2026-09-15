@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project } from '../lib/supabase/types';
-import { ArrowUpRight, X, User } from 'lucide-react';
+import { ArrowUpRight, X, User, Film, Play, Image as ImageIcon } from 'lucide-react';
 
 interface ProjectsSectionProps {
   projects: Project[];
@@ -12,8 +12,17 @@ interface ProjectsSectionProps {
 export function ProjectsSection({ projects }: ProjectsSectionProps) {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [activeProject, setActiveProject] = useState<Project | null>(null);
+  const [activeMediaIndex, setActiveMediaIndex] = useState<number>(0);
+  const [activeTabMedia, setActiveTabMedia] = useState<'video' | 'gallery'>('gallery');
 
   const categories = ['All', 'Photography', 'Videography', 'Graphic Design', 'Campaigns'];
+
+  useEffect(() => {
+    if (activeProject) {
+      setActiveMediaIndex(0);
+      setActiveTabMedia(activeProject.video_url ? 'video' : 'gallery');
+    }
+  }, [activeProject]);
 
   const filteredProjects = selectedCategory === 'All'
     ? projects
@@ -71,8 +80,16 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-80" />
 
-                  <div className="absolute top-4 left-4 px-3.5 py-1 rounded-full glass-card border border-white/15 text-[10px] uppercase font-mono tracking-widest text-white backdrop-blur-md">
-                    {project.category}
+                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                    <span className="px-3.5 py-1 rounded-full glass-card border border-white/15 text-[10px] uppercase font-mono tracking-widest text-white backdrop-blur-md">
+                      {project.category}
+                    </span>
+                    {project.video_url && (
+                      <span className="px-2.5 py-1 rounded-full bg-black/70 border border-white/20 text-[10px] uppercase font-mono text-white flex items-center gap-1 backdrop-blur-md">
+                        <Film className="w-3 h-3 text-white" />
+                        Video
+                      </span>
+                    )}
                   </div>
 
                   <div className="absolute bottom-4 right-4 p-3.5 rounded-full bg-white text-black opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 shadow-2xl">
@@ -93,15 +110,23 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
                     {project.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2.5 py-1 rounded-md bg-zinc-900/90 border border-zinc-800 text-[10px] text-zinc-400 font-mono"
-                      >
-                        #{tag}
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2.5 py-1 rounded-md bg-zinc-900/90 border border-zinc-800 text-[10px] text-zinc-400 font-mono"
+                        >
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {project.gallery_images && project.gallery_images.length > 1 && (
+                      <span className="text-[10px] font-mono text-zinc-500">
+                        {project.gallery_images.length} Photos
                       </span>
-                    ))}
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -125,24 +150,96 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="max-w-4xl w-full bg-[#09090b] rounded-3xl border border-zinc-800 overflow-hidden shadow-2xl relative my-auto"
+              className="max-w-4xl w-full bg-[#09090b] rounded-3xl border border-zinc-800 overflow-hidden shadow-2xl relative my-auto max-h-[90vh] overflow-y-auto"
             >
               <button
                 onClick={() => setActiveProject(null)}
-                className="absolute top-6 right-6 z-10 p-3 rounded-full bg-zinc-900/80 text-zinc-400 hover:text-white border border-zinc-700 transition-colors cursor-pointer"
+                className="absolute top-6 right-6 z-20 p-3 rounded-full bg-zinc-900/80 text-zinc-400 hover:text-white border border-zinc-700 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              <div className="aspect-video w-full relative bg-zinc-900">
-                <img
-                  src={activeProject.image_url}
-                  alt={activeProject.title}
-                  className="w-full h-full object-cover"
-                />
+              {/* Media Player / Main Showcase Viewer */}
+              <div className="relative aspect-video w-full bg-black overflow-hidden group">
+                {activeTabMedia === 'video' && activeProject.video_url ? (
+                  <video
+                    src={activeProject.video_url}
+                    controls
+                    autoPlay
+                    className="w-full h-full object-contain bg-black"
+                  />
+                ) : (
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={activeMediaIndex}
+                      initial={{ opacity: 0, scale: 1.02 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      src={
+                        activeProject.gallery_images && activeProject.gallery_images[activeMediaIndex]
+                          ? activeProject.gallery_images[activeMediaIndex]
+                          : activeProject.image_url
+                      }
+                      alt={activeProject.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </AnimatePresence>
+                )}
               </div>
 
-              <div className="p-8 md:p-12 space-y-6">
+              {/* Media Switcher Tabs & Thumbnail Bar */}
+              <div className="px-6 py-4 bg-zinc-950 border-b border-zinc-800 flex flex-wrap items-center justify-between gap-4">
+                {/* Media Type Toggles (if video exists) */}
+                {activeProject.video_url && (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setActiveTabMedia('video')}
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-mono uppercase flex items-center gap-1.5 transition-colors cursor-pointer ${
+                        activeTabMedia === 'video'
+                          ? 'bg-white text-black font-semibold'
+                          : 'bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white'
+                      }`}
+                    >
+                      <Play className="w-3 h-3" />
+                      <span>Video Showcase</span>
+                    </button>
+                    <button
+                      onClick={() => setActiveTabMedia('gallery')}
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-mono uppercase flex items-center gap-1.5 transition-colors cursor-pointer ${
+                        activeTabMedia === 'gallery'
+                          ? 'bg-white text-black font-semibold'
+                          : 'bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white'
+                      }`}
+                    >
+                      <ImageIcon className="w-3 h-3" />
+                      <span>Photo Gallery</span>
+                    </button>
+                  </div>
+                )}
+
+                {/* Thumbnails Selector */}
+                {activeTabMedia === 'gallery' && activeProject.gallery_images && activeProject.gallery_images.length > 1 && (
+                  <div className="flex items-center gap-2 overflow-x-auto py-1">
+                    {activeProject.gallery_images.map((img, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setActiveMediaIndex(idx)}
+                        className={`w-12 h-12 rounded-xl overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
+                          activeMediaIndex === idx
+                            ? 'border-white scale-105 shadow-md shadow-white/10'
+                            : 'border-zinc-800 opacity-60 hover:opacity-100'
+                        }`}
+                      >
+                        <img src={img} alt={`Thumb ${idx + 1}`} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Case Study Details */}
+              <div className="p-6 md:p-10 space-y-6">
                 <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-800 pb-6">
                   <div>
                     <span className="text-xs uppercase font-mono tracking-widest text-zinc-400">
@@ -165,7 +262,7 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
                   {activeProject.description}
                 </p>
 
-                <div className="flex flex-wrap gap-2 pt-4">
+                <div className="flex flex-wrap gap-2 pt-2">
                   {activeProject.tags.map((t) => (
                     <span key={t} className="px-3 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-300">
                       #{t}

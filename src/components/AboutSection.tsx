@@ -36,7 +36,7 @@ export function AboutSection({ onOpenVisionModal }: { onOpenVisionModal: () => v
       <div className="max-w-7xl mx-auto space-y-20">
         {/* Top Tagline */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <span className="text-xs uppercase tracking-[0.3em] font-mono text-zinc-500">ABOUT OLUFEMI DIGITAL AGENCY</span>
+          <span className="text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-mono text-zinc-500 whitespace-nowrap">ABOUT OLUFEMI DIGITAL AGENCY</span>
           <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase text-white leading-tight">
             WE DON'T JUST CREATE. <br />
             <span className="text-stroke">WE UNDERSTAND.</span>

@@ -7,6 +7,8 @@ export interface Project {
   client_name?: string;
   year?: string;
   image_url: string;
+  gallery_images?: string[];
+  video_url?: string;
   tags: string[];
   featured?: boolean;
   created_at?: string;

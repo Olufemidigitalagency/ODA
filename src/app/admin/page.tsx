@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   Plus, Trash2, Eye, LogOut, Lock, Mail, Image as ImageIcon,
-  CheckCircle2, FolderKanban, MessageSquare, FileText, ArrowLeft, Star, Upload, Loader2
+  CheckCircle2, FolderKanban, MessageSquare, FileText, ArrowLeft, Star, Upload, Loader2,
+  Video, Film, X
 } from 'lucide-react';
 import { Project, Review } from '../../lib/supabase/types';
 import {
@@ -16,6 +17,7 @@ import {
   uploadMediaFile, VisionQuestionnaire
 } from '../../lib/data-store';
 import { createClient } from '../../lib/supabase/client';
+import { ConfirmModal } from '../../components/ConfirmModal';
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,6 +39,21 @@ export default function AdminPage() {
   const [showAddProjectModal, setShowAddProjectModal] = useState(false);
   const [showAddReviewModal, setShowAddReviewModal] = useState(false);
 
+  // Confirmation Modal State
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    variant?: 'danger' | 'success' | 'info';
+    confirmText?: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: () => {},
+  });
+
   // New Project Form State
   const [projTitle, setProjTitle] = useState('');
   const [projCategory, setProjCategory] = useState('Photography');
@@ -45,7 +62,11 @@ export default function AdminPage() {
   const [projDesc, setProjDesc] = useState('');
   const [projTags, setProjTags] = useState('Commercial, Editorial');
   const [projImageUrl, setProjImageUrl] = useState('');
+  const [projGalleryImages, setProjGalleryImages] = useState<string[]>([]);
+  const [projVideoUrl, setProjVideoUrl] = useState('');
   const [uploadingProj, setUploadingProj] = useState(false);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
 
   // New Review Form State
   const [revAuthor, setRevAuthor] = useState('');
@@ -163,14 +184,14 @@ export default function AdminPage() {
     setIsAuthenticated(false);
   };
 
-  // Add Project
-  const handleCreateProject = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Add Project Confirmation & Execution
+  const submitProject = async () => {
     if (!projTitle || !projDesc) return;
 
     const slug = projTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
     const tags = projTags.split(',').map((t) => t.trim()).filter(Boolean);
-    const finalImg = projImageUrl || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=1600&auto=format&fit=crop';
+    const finalImg = projImageUrl || projGalleryImages[0] || 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?q=80&w=1600&auto=format&fit=crop';
+    const finalGallery = projGalleryImages.length > 0 ? projGalleryImages : [finalImg];
 
     const created = await saveProjectToDatabase({
       title: projTitle,
@@ -180,6 +201,8 @@ export default function AdminPage() {
       client_name: projClient,
       year: projYear,
       image_url: finalImg,
+      gallery_images: finalGallery,
+      video_url: projVideoUrl || undefined,
       tags,
       featured: true,
     });
@@ -189,18 +212,43 @@ export default function AdminPage() {
     setProjTitle('');
     setProjDesc('');
     setProjImageUrl('');
+    setProjGalleryImages([]);
+    setProjVideoUrl('');
+    setConfirmModal((prev) => ({ ...prev, isOpen: false }));
   };
 
-  // Delete Project
-  const handleDeleteProject = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this project?')) return;
-    await deleteProjectFromDatabase(id);
-    setProjects(projects.filter((p) => p.id !== id));
-  };
-
-  // Add Review
-  const handleCreateReview = async (e: React.FormEvent) => {
+  const handleCreateProject = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!projTitle || !projDesc) return;
+    setConfirmModal({
+      isOpen: true,
+      title: 'Publish New Media Work',
+      message: `Are you sure you want to publish "${projTitle}" to the public portfolio showcase?`,
+      variant: 'info',
+      confirmText: 'Publish Project',
+      onConfirm: submitProject,
+    });
+  };
+
+  // Delete Project with Confirmation Modal
+  const handleDeleteProject = (id: string) => {
+    const proj = projects.find((p) => p.id === id);
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Media Work',
+      message: `Are you sure you want to permanently delete "${proj?.title || 'this project'}"? This action cannot be undone.`,
+      variant: 'danger',
+      confirmText: 'Delete Project',
+      onConfirm: async () => {
+        await deleteProjectFromDatabase(id);
+        setProjects(projects.filter((p) => p.id !== id));
+        setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+      },
+    });
+  };
+
+  // Add Review Confirmation & Execution
+  const submitReview = async () => {
     if (!revAuthor || !revContent) return;
 
     const created = await saveReviewToDatabase({
@@ -217,23 +265,57 @@ export default function AdminPage() {
     setRevAuthor('');
     setRevRole('');
     setRevContent('');
+    setConfirmModal((prev) => ({ ...prev, isOpen: false }));
   };
 
-  // Delete Review
-  const handleDeleteReview = async (id: string) => {
-    if (!confirm('Delete this testimonial review?')) return;
-    await deleteReviewFromDatabase(id);
-    setReviews(reviews.filter((r) => r.id !== id));
+  const handleCreateReview = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!revAuthor || !revContent) return;
+    setConfirmModal({
+      isOpen: true,
+      title: 'Publish Testimonial Review',
+      message: `Are you sure you want to publish this review from "${revAuthor}" to the website?`,
+      variant: 'info',
+      confirmText: 'Publish Review',
+      onConfirm: submitReview,
+    });
   };
 
-  // Delete Questionnaire Brief
-  const handleDeleteQuestionnaire = async (id: string) => {
-    if (!confirm('Delete this vision questionnaire brief?')) return;
-    await deleteQuestionnaireFromDatabase(id);
-    setQuestionnaires(questionnaires.filter((q) => q.id !== id));
+  // Delete Review with Confirmation Modal
+  const handleDeleteReview = (id: string) => {
+    const rev = reviews.find((r) => r.id === id);
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Testimonial Review',
+      message: `Are you sure you want to delete the review by "${rev?.author_name || 'this client'}"?`,
+      variant: 'danger',
+      confirmText: 'Delete Review',
+      onConfirm: async () => {
+        await deleteReviewFromDatabase(id);
+        setReviews(reviews.filter((r) => r.id !== id));
+        setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+      },
+    });
   };
 
-  // Media File Upload Handler
+  // Delete Questionnaire Brief with Confirmation Modal
+  const handleDeleteQuestionnaire = (id: string) => {
+    const q = questionnaires.find((item) => item.id === id);
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Vision Brief',
+      message: `Are you sure you want to remove the Client Vision Brief submitted by "${q?.client_name || 'this client'}"?`,
+      variant: 'danger',
+      confirmText: 'Delete Brief',
+      onConfirm: async () => {
+        await deleteQuestionnaireFromDatabase(id);
+        setQuestionnaires(questionnaires.filter((item) => item.id !== id));
+        setConfirmModal((prev) => ({ ...prev, isOpen: false }));
+      },
+    });
+  };
+
+  // Media File Upload Handler (Cover Image)
   const handleProjectImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -242,10 +324,59 @@ export default function AdminPage() {
     try {
       const url = await uploadMediaFile(file);
       setProjImageUrl(url);
+      if (!projGalleryImages.includes(url)) {
+        setProjGalleryImages((prev) => [...prev, url].slice(0, 5));
+      }
     } catch (err) {
       console.error(err);
     } finally {
       setUploadingProj(false);
+    }
+  };
+
+  // Multi-Image Gallery File Upload Handler (Max 5 images)
+  const handleGalleryImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    const maxAllowed = projCategory === 'Videography' && projVideoUrl ? 3 : 5;
+    const remainingSlots = maxAllowed - projGalleryImages.length;
+    if (remainingSlots <= 0) return;
+
+    const filesToUpload = files.slice(0, remainingSlots);
+    setUploadingGallery(true);
+
+    try {
+      const uploadPromises = filesToUpload.map((f) => uploadMediaFile(f));
+      const urls = await Promise.all(uploadPromises);
+      setProjGalleryImages((prev) => [...prev, ...urls].slice(0, maxAllowed));
+      if (!projImageUrl && urls.length > 0) {
+        setProjImageUrl(urls[0]);
+      }
+    } catch (err) {
+      console.error('Gallery image upload failed', err);
+    } finally {
+      setUploadingGallery(false);
+    }
+  };
+
+  const removeGalleryImage = (indexToRemove: number) => {
+    setProjGalleryImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  // Optional Video Upload Handler
+  const handleVideoFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingVideo(true);
+    try {
+      const url = await uploadMediaFile(file);
+      setProjVideoUrl(url);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setUploadingVideo(false);
     }
   };
 
@@ -691,30 +822,154 @@ export default function AdminPage() {
                 />
               </div>
 
+              {/* Cover Image Upload */}
               <div>
-                <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">COVER MEDIA UPLOAD</label>
+                <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">MAIN COVER IMAGE UPLOAD</label>
                 <div className="border border-dashed border-zinc-800 p-4 rounded-xl text-center relative bg-zinc-950">
                   <input type="file" accept="image/*" onChange={handleProjectImageUpload} className="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
                   {uploadingProj ? (
                     <div className="flex items-center justify-center gap-2 py-2">
                       <Loader2 className="w-5 h-5 animate-spin text-white" />
-                      <span className="text-xs font-mono text-zinc-400">Uploading to Supabase Storage...</span>
+                      <span className="text-xs font-mono text-zinc-400">Uploading cover image...</span>
                     </div>
                   ) : projImageUrl ? (
                     <div className="flex items-center justify-between p-1">
-                      <img src={projImageUrl} alt="Preview" className="h-12 rounded object-cover" />
-                      <span className="text-xs text-green-400 font-mono">Image Uploaded</span>
+                      <img src={projImageUrl} alt="Cover Preview" className="h-12 rounded object-cover border border-zinc-700" />
+                      <span className="text-xs text-green-400 font-mono flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Cover Uploaded
+                      </span>
                     </div>
                   ) : (
                     <div className="flex flex-col items-center gap-1">
                       <Upload className="w-6 h-6 text-zinc-500" />
-                      <span className="text-xs text-zinc-400 font-medium">Click to select image file</span>
+                      <span className="text-xs text-zinc-400 font-medium">Click to select primary cover image</span>
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4">
+              {/* Gallery Images Upload (Max 5 images) */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs uppercase font-mono text-zinc-400">
+                    PROJECT GALLERY IMAGES ({projGalleryImages.length}/{projCategory === 'Videography' && projVideoUrl ? 3 : 5} MAX)
+                  </label>
+                  <span className="text-[10px] text-zinc-500 font-mono">Max 5 image previews</span>
+                </div>
+
+                {/* Upload Trigger Area */}
+                {projGalleryImages.length < (projCategory === 'Videography' && projVideoUrl ? 3 : 5) && (
+                  <div className="border border-dashed border-zinc-800 p-3.5 rounded-xl text-center relative bg-zinc-950/60 hover:border-zinc-700 transition-colors mb-3">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleGalleryImageUpload}
+                      className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                    />
+                    {uploadingGallery ? (
+                      <div className="flex items-center justify-center gap-2 py-1">
+                        <Loader2 className="w-4 h-4 animate-spin text-white" />
+                        <span className="text-xs font-mono text-zinc-400">Uploading gallery images...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2">
+                        <Plus className="w-4 h-4 text-zinc-400" />
+                        <span className="text-xs text-zinc-400">Add Showcase Images to Gallery</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Gallery Previews Grid */}
+                {projGalleryImages.length > 0 && (
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 pt-1">
+                    {projGalleryImages.map((imgUrl, index) => (
+                      <div key={index} className="relative group aspect-square rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900">
+                        <img src={imgUrl} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeGalleryImage(index)}
+                          className="absolute top-1 right-1 p-1 rounded-full bg-black/80 text-white hover:bg-red-600 transition-colors shadow-lg cursor-pointer opacity-80 group-hover:opacity-100"
+                          title="Remove image"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                        <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/80 text-[9px] font-mono text-zinc-300">
+                          #{index + 1}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Videography Category Special Section */}
+              {projCategory === 'Videography' && (
+                <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white">
+                    <Video className="w-4 h-4 text-white" />
+                    <span>VIDEOGRAPHY PROJECT MEDIA OPTIONS (OPTIONAL)</span>
+                  </div>
+
+                  <p className="text-xs text-zinc-400 font-light">
+                    Upload an optional video file or paste a video link alongside up to 3 showcase gallery images.
+                  </p>
+
+                  <div className="space-y-3">
+                    <div className="border border-dashed border-zinc-800 p-3 rounded-xl text-center relative bg-zinc-900/50">
+                      <input
+                        type="file"
+                        accept="video/mp4,video/webm,video/ogg"
+                        onChange={handleVideoFileUpload}
+                        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                      />
+                      {uploadingVideo ? (
+                        <div className="flex items-center justify-center gap-2 py-1">
+                          <Loader2 className="w-4 h-4 animate-spin text-white" />
+                          <span className="text-xs font-mono text-zinc-400">Uploading video file...</span>
+                        </div>
+                      ) : projVideoUrl ? (
+                        <div className="flex items-center justify-between p-1">
+                          <span className="text-xs text-green-400 font-mono truncate max-w-[200px]">Video Uploaded</span>
+                          <button
+                            type="button"
+                            onClick={() => setProjVideoUrl('')}
+                            className="text-xs text-red-400 hover:underline"
+                          >
+                            Remove Video
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center gap-2">
+                          <Film className="w-4 h-4 text-zinc-400" />
+                          <span className="text-xs text-zinc-400">Upload Video File (MP4/WebM)</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] uppercase font-mono text-zinc-500 mb-1">OR PASTE VIDEO URL</label>
+                      <input
+                        type="url"
+                        placeholder="https://commondatastorage.googleapis.com/... or https://..."
+                        value={projVideoUrl}
+                        onChange={(e) => setProjVideoUrl(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-xs placeholder-zinc-600 focus:outline-none focus:border-white"
+                      />
+                    </div>
+
+                    {projVideoUrl && (
+                      <div className="mt-2 rounded-xl overflow-hidden border border-zinc-800 bg-black aspect-video">
+                        <video src={projVideoUrl} controls className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-900">
                 <button
                   type="button"
                   onClick={() => setShowAddProjectModal(false)}
@@ -724,7 +979,7 @@ export default function AdminPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-8 py-2.5 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider hover:bg-zinc-200"
+                  className="px-8 py-2.5 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider hover:bg-zinc-200 cursor-pointer"
                 >
                   Publish Project
                 </button>
@@ -768,7 +1023,7 @@ export default function AdminPage() {
                 <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">RATING</label>
                 <div className="flex items-center gap-2 py-1">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <button key={star} type="button" onClick={() => setRevRating(star)}>
+                    <button key={star} type="button" onClick={() => setRevRating(star)} className="cursor-pointer">
                       <Star className={`w-5 h-5 ${star <= revRating ? 'text-white fill-white' : 'text-zinc-700'}`} />
                     </button>
                   ))}
@@ -787,7 +1042,7 @@ export default function AdminPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-900">
                 <button
                   type="button"
                   onClick={() => setShowAddReviewModal(false)}
@@ -797,7 +1052,7 @@ export default function AdminPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-8 py-2.5 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider hover:bg-zinc-200"
+                  className="px-8 py-2.5 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider hover:bg-zinc-200 cursor-pointer"
                 >
                   Publish Testimonial
                 </button>
@@ -806,6 +1061,17 @@ export default function AdminPage() {
           </div>
         </div>
       )}
+
+      {/* Global Framer Motion Confirmation Dialog */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        variant={confirmModal.variant}
+        confirmText={confirmModal.confirmText}
+        onConfirm={confirmModal.onConfirm}
+        onCancel={() => setConfirmModal((prev) => ({ ...prev, isOpen: false }))}
+      />
 
     </div>
   );

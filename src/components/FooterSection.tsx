@@ -126,7 +126,7 @@ export function FooterSection() {
             <span className="text-4xl font-black uppercase font-mono tracking-tighter text-white group-hover:tracking-widest transition-all duration-300">
               ODA
             </span>
-            <p className="text-xs text-zinc-500 font-mono mt-1">OLUFEMI DIGITAL AGENCY</p>
+            <p className="text-xs text-zinc-500 font-mono mt-1 whitespace-nowrap">OLUFEMI DIGITAL AGENCY</p>
           </a>
 
           <div className="flex flex-wrap items-center gap-8 text-xs font-mono text-zinc-400 uppercase tracking-widest">

@@ -77,7 +77,7 @@ export function Preloader({ onComplete }: { onComplete?: () => void }) {
                   transition: { staggerChildren: 0.03, delayChildren: 0.2 }
                 }
               }}
-              className="flex flex-wrap justify-center items-center gap-[0.15em] text-lg sm:text-2xl md:text-3xl font-bold tracking-[0.2em] uppercase text-zinc-300 font-mono"
+              className="flex flex-nowrap justify-center items-center gap-[0.05em] sm:gap-[0.15em] text-[11px] min-[380px]:text-xs min-[440px]:text-sm sm:text-2xl md:text-3xl font-bold tracking-[0.05em] sm:tracking-[0.2em] uppercase text-zinc-300 font-mono whitespace-nowrap overflow-hidden max-w-full"
             >
               {fullNameLetters.map((char, index) => (
                 <motion.span
@@ -86,7 +86,7 @@ export function Preloader({ onComplete }: { onComplete?: () => void }) {
                     hidden: { opacity: 0, y: 20 },
                     visible: { opacity: 1, y: 0 }
                   }}
-                  className={char === ' ' ? 'mr-3' : 'inline-block text-white'}
+                  className={char === ' ' ? 'mr-1 sm:mr-3' : 'inline-block text-white'}
                 >
                   {char === ' ' ? '\u00A0' : char}
                 </motion.span>
