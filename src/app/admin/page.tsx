@@ -140,8 +140,8 @@ export default function AdminPage() {
       }
     } else {
       // Secure local credential check when Supabase keys are not set
-      const validEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@oda.studio';
-      const validPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'oda2025admin';
+      const validEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'femikolawole142@gmail.com';
+      const validPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'Olufemikolawole7236*';
 
       if (authEmail.trim().toLowerCase() === validEmail.toLowerCase() && authPassword === validPass) {
         setIsAuthenticated(true);
@@ -288,7 +288,7 @@ export default function AdminPage() {
                 <input
                   type="email"
                   required
-                  placeholder="admin@oda.studio"
+                  placeholder="femikolawole142@gmail.com"
                   value={authEmail}
                   onChange={(e) => setAuthEmail(e.target.value)}
                   className="w-full pl-11 pr-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-600 focus:outline-none focus:border-white transition-colors text-sm"

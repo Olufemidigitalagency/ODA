@@ -11,7 +11,7 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- --------------------------------------------------------
 -- 0. AUTOMATIC ADMIN USER CREATION IN SUPABASE AUTH
--- Creates pre-confirmed default admin: admin@oda.studio / oda2025admin
+-- Creates pre-confirmed default admin: femikolawole142@gmail.com / Olufemikolawole7236*
 -- --------------------------------------------------------
 INSERT INTO auth.users (
     instance_id,
@@ -34,18 +34,18 @@ SELECT
     gen_random_uuid(),
     'authenticated',
     'authenticated',
-    'admin@oda.studio',
-    crypt('oda2025admin', gen_salt('bf')),
+    'femikolawole142@gmail.com',
+    crypt('Olufemikolawole7236*', gen_salt('bf')),
     now(),
     now(),
     now(),
     '{"provider":"email","providers":["email"]}',
-    '{"full_name":"ODA Admin"}',
+    '{"full_name":"Olufemi Kolawole"}',
     false,
     now(),
     now()
 WHERE NOT EXISTS (
-    SELECT 1 FROM auth.users WHERE email = 'admin@oda.studio'
+    SELECT 1 FROM auth.users WHERE email = 'femikolawole142@gmail.com'
 );
 
 -- --------------------------------------------------------
