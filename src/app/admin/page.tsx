@@ -84,27 +84,43 @@ export default function AdminPage() {
     setQuestionnaires(qList);
   }
 
-  // Handle Login
+  const [isSignUpMode, setIsSignUpMode] = useState(false);
+  const [authSuccessMessage, setAuthSuccessMessage] = useState('');
+
+  // Handle Login / Sign Up
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthLoading(true);
     setAuthError('');
+    setAuthSuccessMessage('');
 
     const supabase = createClient();
     if (supabase) {
       try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: authEmail,
-          password: authPassword,
-        });
-
-        if (error) throw error;
-        if (data.user) {
-          setUser(data.user);
-          setIsAuthenticated(true);
+        if (isSignUpMode) {
+          const { data, error } = await supabase.auth.signUp({
+            email: authEmail,
+            password: authPassword,
+          });
+          if (error) throw error;
+          if (data.user) {
+            setUser(data.user);
+            setIsAuthenticated(true);
+            setAuthSuccessMessage('Admin account created successfully!');
+          }
+        } else {
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email: authEmail,
+            password: authPassword,
+          });
+          if (error) throw error;
+          if (data.user) {
+            setUser(data.user);
+            setIsAuthenticated(true);
+          }
         }
       } catch (err: any) {
-        setAuthError(err.message || 'Invalid admin credentials');
+        setAuthError(err.message || 'Authentication failed');
       } finally {
         setAuthLoading(false);
       }
@@ -230,9 +246,19 @@ export default function AdminPage() {
         >
           <div className="text-center">
             <span className="font-mono text-3xl font-black tracking-widest text-white">ODA</span>
-            <h1 className="text-xl font-bold uppercase text-white mt-2">ADMIN PORTAL LOGIN</h1>
-            <p className="text-xs font-mono text-zinc-400 mt-1">Sign in to manage projects, reviews & vision briefs</p>
+            <h1 className="text-xl font-bold uppercase text-white mt-2">
+              {isSignUpMode ? 'REGISTER ADMIN ACCOUNT' : 'ADMIN PORTAL LOGIN'}
+            </h1>
+            <p className="text-xs font-mono text-zinc-400 mt-1">
+              {isSignUpMode ? 'Create your official agency owner credentials' : 'Sign in to manage projects, reviews & vision briefs'}
+            </p>
           </div>
+
+          {authSuccessMessage && (
+            <div className="p-3 bg-green-950/60 border border-green-800/40 text-green-400 rounded-xl text-xs font-mono text-center">
+              {authSuccessMessage}
+            </div>
+          )}
 
           {authError && (
             <div className="p-3 bg-red-950/60 border border-red-800/40 text-red-400 rounded-xl text-xs font-mono text-center">
@@ -274,14 +300,32 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={authLoading}
-              className="w-full py-3.5 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 active:scale-95"
+              className="w-full py-3.5 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
             >
-              {authLoading ? <Loader2 className="w-4 h-4 animate-spin text-black" /> : 'Enter Admin Dashboard'}
+              {authLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin text-black" />
+              ) : isSignUpMode ? (
+                'Create Admin Account'
+              ) : (
+                'Enter Admin Dashboard'
+              )}
             </button>
           </form>
 
-          <div className="text-center pt-4 border-t border-zinc-900">
-            <Link href="/" className="text-xs text-zinc-400 hover:text-white font-mono flex items-center justify-center gap-1.5">
+          <div className="text-center pt-2 space-y-3 border-t border-zinc-900">
+            <button
+              type="button"
+              onClick={() => {
+                setIsSignUpMode(!isSignUpMode);
+                setAuthError('');
+                setAuthSuccessMessage('');
+              }}
+              className="text-xs text-zinc-400 hover:text-white underline underline-offset-4 transition-colors font-mono cursor-pointer"
+            >
+              {isSignUpMode ? 'Already registered? Sign In to Admin' : 'First time setting up? Register Admin Account'}
+            </button>
+
+            <Link href="/" className="text-xs text-zinc-400 hover:text-white font-mono flex items-center justify-center gap-1.5 pt-1">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Public Website</span>
             </Link>
