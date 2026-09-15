@@ -383,61 +383,61 @@ export default function AdminPage() {
   // Unauthenticated Login View
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#09090b] text-white flex flex-col items-center justify-center p-6 bg-noise">
+      <div className="min-h-screen bg-white text-zinc-900 flex flex-col items-center justify-center p-6 bg-noise">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-md w-full bg-[#121215] border border-zinc-800 rounded-3xl p-8 shadow-2xl space-y-6"
+          className="max-w-md w-full bg-white border border-zinc-200 rounded-3xl p-8 shadow-2xl space-y-6"
         >
           <div className="text-center">
-            <span className="font-mono text-3xl font-black tracking-widest text-white">ODA</span>
-            <h1 className="text-xl font-bold uppercase text-white mt-2">
+            <span className="font-mono text-3xl font-black tracking-widest text-zinc-900">ODA</span>
+            <h1 className="text-xl font-bold uppercase text-zinc-900 mt-2">
               {isSignUpMode ? 'REGISTER ADMIN ACCOUNT' : 'ADMIN PORTAL LOGIN'}
             </h1>
-            <p className="text-xs font-mono text-zinc-400 mt-1">
+            <p className="text-xs font-mono text-zinc-600 mt-1">
               {isSignUpMode ? 'Create your official agency owner credentials' : 'Sign in to manage projects, reviews & vision briefs'}
             </p>
           </div>
 
           {authSuccessMessage && (
-            <div className="p-3 bg-green-950/60 border border-green-800/40 text-green-400 rounded-xl text-xs font-mono text-center">
+            <div className="p-3 bg-green-50 border border-green-200 text-green-700 rounded-xl text-xs font-mono text-center">
               {authSuccessMessage}
             </div>
           )}
 
           {authError && (
-            <div className="p-3 bg-red-950/60 border border-red-800/40 text-red-400 rounded-xl text-xs font-mono text-center">
+            <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-xl text-xs font-mono text-center">
               {authError}
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs uppercase font-mono text-zinc-400 mb-1.5">ADMIN EMAIL</label>
+              <label className="block text-xs uppercase font-mono text-zinc-600 mb-1.5">ADMIN EMAIL</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                 <input
                   type="email"
                   required
                   placeholder="femikolawole142@gmail.com"
                   value={authEmail}
                   onChange={(e) => setAuthEmail(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-600 focus:outline-none focus:border-white transition-colors text-sm"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-black transition-colors text-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs uppercase font-mono text-zinc-400 mb-1.5">PASSWORD</label>
+              <label className="block text-xs uppercase font-mono text-zinc-600 mb-1.5">PASSWORD</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                 <input
                   type="password"
                   required
                   placeholder="••••••••"
                   value={authPassword}
                   onChange={(e) => setAuthPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:outline-none focus:border-white transition-colors text-sm"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 focus:outline-none focus:border-black transition-colors text-sm"
                 />
               </div>
             </div>
@@ -445,10 +445,10 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={authLoading}
-              className="w-full py-3.5 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+              className="w-full py-3.5 rounded-full bg-black text-white font-semibold text-xs uppercase tracking-wider hover:bg-zinc-800 transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer shadow-lg shadow-black/10"
             >
               {authLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin text-black" />
+                <Loader2 className="w-4 h-4 animate-spin text-white" />
               ) : isSignUpMode ? (
                 'Create Admin Account'
               ) : (
@@ -457,7 +457,7 @@ export default function AdminPage() {
             </button>
           </form>
 
-          <div className="text-center pt-2 space-y-3 border-t border-zinc-900">
+          <div className="text-center pt-2 space-y-3 border-t border-zinc-100">
             <button
               type="button"
               onClick={() => {
@@ -465,12 +465,12 @@ export default function AdminPage() {
                 setAuthError('');
                 setAuthSuccessMessage('');
               }}
-              className="text-xs text-zinc-400 hover:text-white underline underline-offset-4 transition-colors font-mono cursor-pointer"
+              className="text-xs text-zinc-600 hover:text-black underline underline-offset-4 transition-colors font-mono cursor-pointer"
             >
               {isSignUpMode ? 'Already registered? Sign In to Admin' : 'First time setting up? Register Admin Account'}
             </button>
 
-            <Link href="/" className="text-xs text-zinc-400 hover:text-white font-mono flex items-center justify-center gap-1.5 pt-1">
+            <Link href="/" className="text-xs text-zinc-600 hover:text-black font-mono flex items-center justify-center gap-1.5 pt-1">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Public Website</span>
             </Link>
@@ -482,23 +482,23 @@ export default function AdminPage() {
 
   // Authenticated Admin Dashboard View
   return (
-    <div className="min-h-screen bg-[#09090b] text-white bg-noise">
+    <div className="min-h-screen bg-white text-zinc-900 bg-noise">
       {/* Admin Top Header */}
-      <header className="border-b border-zinc-800 glass-header sticky top-0 z-40 px-6 md:px-12 py-4">
+      <header className="border-b border-zinc-200 glass-header sticky top-0 z-40 px-6 md:px-12 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-full border border-zinc-700 flex items-center justify-center p-0.5">
+              <div className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center p-0.5">
                 <img src="/logo-circle.png" alt="ODA" className="w-full h-full object-cover rounded-full" />
               </div>
-              <span className="font-black font-mono text-xl uppercase tracking-tighter">ODA ADMIN</span>
+              <span className="font-black font-mono text-xl uppercase tracking-tighter text-zinc-900">ODA ADMIN</span>
             </Link>
           </div>
 
           <div className="flex items-center gap-4">
             <Link
               href="/"
-              className="px-4 py-2 text-xs font-mono uppercase bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 rounded-full flex items-center gap-1.5 transition-colors"
+              className="px-4 py-2 text-xs font-mono uppercase bg-zinc-100 hover:bg-zinc-200 text-zinc-900 border border-zinc-300 rounded-full flex items-center gap-1.5 transition-colors"
             >
               <Eye className="w-3.5 h-3.5" />
               <span>View Site</span>
@@ -506,7 +506,7 @@ export default function AdminPage() {
 
             <button
               onClick={handleLogout}
-              className="px-4 py-2 text-xs font-mono uppercase bg-red-950/60 text-red-300 hover:bg-red-900/60 border border-red-800/40 rounded-full flex items-center gap-1.5 transition-colors"
+              className="px-4 py-2 text-xs font-mono uppercase bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded-full flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span>Sign Out</span>
@@ -520,39 +520,39 @@ export default function AdminPage() {
 
         {/* Dashboard Stats Bar */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl glass-card border border-zinc-800 flex items-center justify-between">
+          <div className="p-6 rounded-2xl glass-card border border-zinc-200 bg-zinc-50/50 flex items-center justify-between">
             <div>
               <p className="text-xs uppercase font-mono text-zinc-500">FEATURED PROJECTS</p>
-              <p className="text-3xl font-bold font-mono text-white mt-1">{projects.length}</p>
+              <p className="text-3xl font-bold font-mono text-zinc-900 mt-1">{projects.length}</p>
             </div>
-            <FolderKanban className="w-8 h-8 text-zinc-600" />
+            <FolderKanban className="w-8 h-8 text-zinc-400" />
           </div>
 
-          <div className="p-6 rounded-2xl glass-card border border-zinc-800 flex items-center justify-between">
+          <div className="p-6 rounded-2xl glass-card border border-zinc-200 bg-zinc-50/50 flex items-center justify-between">
             <div>
               <p className="text-xs uppercase font-mono text-zinc-500">CLIENT TESTIMONIALS</p>
-              <p className="text-3xl font-bold font-mono text-white mt-1">{reviews.length}</p>
+              <p className="text-3xl font-bold font-mono text-zinc-900 mt-1">{reviews.length}</p>
             </div>
-            <MessageSquare className="w-8 h-8 text-zinc-600" />
+            <MessageSquare className="w-8 h-8 text-zinc-400" />
           </div>
 
-          <div className="p-6 rounded-2xl glass-card border border-zinc-800 flex items-center justify-between">
+          <div className="p-6 rounded-2xl glass-card border border-zinc-200 bg-zinc-50/50 flex items-center justify-between">
             <div>
               <p className="text-xs uppercase font-mono text-zinc-500">VISION BRIEFS RECEIVED</p>
-              <p className="text-3xl font-bold font-mono text-white mt-1">{questionnaires.length}</p>
+              <p className="text-3xl font-bold font-mono text-zinc-900 mt-1">{questionnaires.length}</p>
             </div>
-            <FileText className="w-8 h-8 text-zinc-600" />
+            <FileText className="w-8 h-8 text-zinc-400" />
           </div>
         </div>
 
         {/* Management Tabs Navigation */}
-        <div className="flex items-center gap-3 border-b border-zinc-800 pb-4 overflow-x-auto">
+        <div className="flex items-center gap-3 border-b border-zinc-200 pb-4 overflow-x-auto">
           <button
             onClick={() => setActiveTab('projects')}
-            className={`px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all ${
+            className={`px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'projects'
-                ? 'bg-white text-black shadow-lg'
-                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                ? 'bg-black text-white shadow-lg'
+                : 'bg-zinc-100 text-zinc-700 hover:text-black border border-zinc-200'
             }`}
           >
             <FolderKanban className="w-4 h-4" />
@@ -561,10 +561,10 @@ export default function AdminPage() {
 
           <button
             onClick={() => setActiveTab('reviews')}
-            className={`px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all ${
+            className={`px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'reviews'
-                ? 'bg-white text-black shadow-lg'
-                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                ? 'bg-black text-white shadow-lg'
+                : 'bg-zinc-100 text-zinc-700 hover:text-black border border-zinc-200'
             }`}
           >
             <MessageSquare className="w-4 h-4" />
@@ -573,10 +573,10 @@ export default function AdminPage() {
 
           <button
             onClick={() => setActiveTab('vision')}
-            className={`px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all ${
+            className={`px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
               activeTab === 'vision'
-                ? 'bg-white text-black shadow-lg'
-                : 'bg-zinc-900 text-zinc-400 hover:text-white border border-zinc-800'
+                ? 'bg-black text-white shadow-lg'
+                : 'bg-zinc-100 text-zinc-700 hover:text-black border border-zinc-200'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -589,13 +589,13 @@ export default function AdminPage() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-black uppercase text-white">FEATURED MEDIA PROJECTS</h2>
-                <p className="text-xs font-mono text-zinc-400">Add or remove portfolio projects showcased on the landing page</p>
+                <h2 className="text-2xl font-black uppercase text-zinc-900">FEATURED MEDIA PROJECTS</h2>
+                <p className="text-xs font-mono text-zinc-600">Add or remove portfolio projects showcased on the landing page</p>
               </div>
 
               <button
                 onClick={() => setShowAddProjectModal(true)}
-                className="px-6 py-3 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-zinc-200 transition-all shadow-lg active:scale-95"
+                className="px-6 py-3 rounded-full bg-black text-white font-semibold text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-zinc-800 transition-all shadow-lg active:scale-95 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add New Project</span>
@@ -604,24 +604,24 @@ export default function AdminPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {projects.map((proj) => (
-                <div key={proj.id} className="p-6 rounded-2xl glass-card border border-zinc-800 flex flex-col justify-between space-y-4">
-                  <div className="aspect-video w-full rounded-xl overflow-hidden bg-zinc-900 relative">
+                <div key={proj.id} className="p-6 rounded-2xl glass-card border border-zinc-200 bg-white flex flex-col justify-between space-y-4 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="aspect-video w-full rounded-xl overflow-hidden bg-zinc-100 relative">
                     <img src={proj.image_url} alt={proj.title} className="w-full h-full object-cover" />
-                    <span className="absolute top-3 left-3 px-3 py-1 rounded-full glass-card border border-white/10 text-[10px] uppercase font-mono text-white">
+                    <span className="absolute top-3 left-3 px-3 py-1 rounded-full glass-card border border-zinc-200 text-[10px] uppercase font-mono text-zinc-900 bg-white/90 font-semibold">
                       {proj.category}
                     </span>
                   </div>
 
                   <div>
-                    <h3 className="font-bold text-lg text-white uppercase">{proj.title}</h3>
-                    <p className="text-xs text-zinc-400 font-light line-clamp-2 mt-1">{proj.description}</p>
+                    <h3 className="font-bold text-lg text-zinc-900 uppercase">{proj.title}</h3>
+                    <p className="text-xs text-zinc-600 font-light line-clamp-2 mt-1">{proj.description}</p>
                   </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-zinc-900">
+                  <div className="flex items-center justify-between pt-4 border-t border-zinc-100">
                     <span className="text-xs font-mono text-zinc-500">{proj.client_name || 'ODA Client'}</span>
                     <button
                       onClick={() => handleDeleteProject(proj.id)}
-                      className="p-2 text-red-400 hover:text-red-300 hover:bg-red-950/60 rounded-lg transition-colors"
+                      className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                       title="Delete Project"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -638,13 +638,13 @@ export default function AdminPage() {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-black uppercase text-white">CLIENT VOICES & TESTIMONIALS</h2>
-                <p className="text-xs font-mono text-zinc-400">Add or manage client feedback entries displayed on the live site</p>
+                <h2 className="text-2xl font-black uppercase text-zinc-900">CLIENT VOICES & TESTIMONIALS</h2>
+                <p className="text-xs font-mono text-zinc-600">Add or manage client feedback entries displayed on the live site</p>
               </div>
 
               <button
                 onClick={() => setShowAddReviewModal(true)}
-                className="px-6 py-3 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-zinc-200 transition-all shadow-lg active:scale-95"
+                className="px-6 py-3 rounded-full bg-black text-white font-semibold text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-zinc-800 transition-all shadow-lg active:scale-95 cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Add Testimonial</span>
@@ -653,27 +653,27 @@ export default function AdminPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {reviews.map((rev) => (
-                <div key={rev.id} className="p-6 rounded-2xl glass-card border border-zinc-800 flex flex-col justify-between space-y-4">
-                  <div className="flex items-center gap-1 text-white">
+                <div key={rev.id} className="p-6 rounded-2xl glass-card border border-zinc-200 bg-white flex flex-col justify-between space-y-4 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="flex items-center gap-1 text-zinc-900">
                     {Array.from({ length: rev.rating }).map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-white text-white" />
+                      <Star key={i} className="w-4 h-4 fill-zinc-900 text-zinc-900" />
                     ))}
                   </div>
 
-                  <p className="text-xs text-zinc-300 italic font-light">"{rev.content}"</p>
+                  <p className="text-xs text-zinc-700 italic font-light">"{rev.content}"</p>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-zinc-900">
+                  <div className="flex items-center justify-between pt-4 border-t border-zinc-100">
                     <div className="flex items-center gap-3">
-                      <img src={rev.author_avatar} alt={rev.author_name} className="w-9 h-9 rounded-full object-cover border border-zinc-700" />
+                      <img src={rev.author_avatar} alt={rev.author_name} className="w-9 h-9 rounded-full object-cover border border-zinc-200" />
                       <div>
-                        <h4 className="font-bold text-xs text-white uppercase">{rev.author_name}</h4>
+                        <h4 className="font-bold text-xs text-zinc-900 uppercase">{rev.author_name}</h4>
                         <p className="text-[10px] font-mono text-zinc-500">{rev.author_role}</p>
                       </div>
                     </div>
 
                     <button
                       onClick={() => handleDeleteReview(rev.id)}
-                      className="p-2 text-red-400 hover:text-red-300 hover:bg-red-950/60 rounded-lg transition-colors"
+                      className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                       title="Delete Testimonial"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -689,29 +689,29 @@ export default function AdminPage() {
         {activeTab === 'vision' && (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-black uppercase text-white">CLIENT VISION QUESTIONNAIRE BRIEFS</h2>
-              <p className="text-xs font-mono text-zinc-400">Incoming project inquiries submitted via the Client Vision Questionnaire</p>
+              <h2 className="text-2xl font-black uppercase text-zinc-900">CLIENT VISION QUESTIONNAIRE BRIEFS</h2>
+              <p className="text-xs font-mono text-zinc-600">Incoming project inquiries submitted via the Client Vision Questionnaire</p>
             </div>
 
             <div className="space-y-4">
               {questionnaires.map((q) => (
-                <div key={q.id} className="p-6 rounded-2xl glass-card border border-zinc-800 space-y-4">
-                  <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-800 pb-4">
+                <div key={q.id} className="p-6 rounded-2xl glass-card border border-zinc-200 bg-white space-y-4 shadow-sm">
+                  <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-100 pb-4">
                     <div>
-                      <h3 className="font-bold text-lg text-white uppercase">{q.client_name}</h3>
-                      <p className="text-xs font-mono text-zinc-400">{q.email} {q.phone && `• ${q.phone}`} {q.brand_name && `• Brand: ${q.brand_name}`}</p>
+                      <h3 className="font-bold text-lg text-zinc-900 uppercase">{q.client_name}</h3>
+                      <p className="text-xs font-mono text-zinc-600">{q.email} {q.phone && `• ${q.phone}`} {q.brand_name && `• Brand: ${q.brand_name}`}</p>
                     </div>
 
                     <div className="flex items-center gap-3 font-mono text-xs">
-                      <span className="px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300">
+                      <span className="px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-700">
                         {q.estimated_budget || 'Custom'}
                       </span>
-                      <span className="px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300">
+                      <span className="px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-700">
                         {q.preferred_timeline || 'Within 2-4 Weeks'}
                       </span>
                       <button
                         onClick={() => handleDeleteQuestionnaire(q.id)}
-                        className="p-2 text-red-400 hover:text-red-300 hover:bg-red-950/60 rounded-lg transition-colors ml-2"
+                        className="p-2 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors ml-2 cursor-pointer"
                         title="Delete Brief"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -723,7 +723,7 @@ export default function AdminPage() {
                     <p className="text-xs uppercase font-mono text-zinc-500 mb-1">SERVICES REQUESTED</p>
                     <div className="flex flex-wrap gap-2">
                       {q.services_requested?.map((s) => (
-                        <span key={s} className="px-2.5 py-1 rounded-md bg-white/10 text-white text-xs font-mono">
+                        <span key={s} className="px-2.5 py-1 rounded-md bg-zinc-100 border border-zinc-200 text-zinc-800 text-xs font-mono font-medium">
                           {s}
                         </span>
                       ))}
@@ -732,7 +732,7 @@ export default function AdminPage() {
 
                   <div>
                     <p className="text-xs uppercase font-mono text-zinc-500 mb-1">CLIENT VISION BRIEF</p>
-                    <p className="text-sm text-zinc-300 font-light leading-relaxed">{q.vision_description}</p>
+                    <p className="text-sm text-zinc-700 font-light leading-relaxed">{q.vision_description}</p>
                   </div>
                 </div>
               ))}
@@ -744,30 +744,30 @@ export default function AdminPage() {
 
       {/* Add Project Modal */}
       {showAddProjectModal && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md p-4 flex items-center justify-center">
-          <div className="max-w-2xl w-full bg-[#09090b] border border-zinc-800 rounded-3xl p-8 space-y-6 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-2xl font-black uppercase text-white">ADD NEW FEATURED WORK</h2>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md p-4 flex items-center justify-center">
+          <div className="max-w-2xl w-full bg-white border border-zinc-200 rounded-3xl p-8 space-y-6 max-h-[90vh] overflow-y-auto shadow-2xl">
+            <h2 className="text-2xl font-black uppercase text-zinc-900">ADD NEW FEATURED WORK</h2>
 
             <form onSubmit={handleCreateProject} className="space-y-4">
               <div>
-                <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">TITLE *</label>
+                <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">TITLE *</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. LUXURY BRAND CAMPAIGN"
                   value={projTitle}
                   onChange={(e) => setProjTitle(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 text-sm focus:outline-none focus:border-black"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">CATEGORY</label>
+                  <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">CATEGORY</label>
                   <select
                     value={projCategory}
                     onChange={(e) => setProjCategory(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 text-sm focus:outline-none focus:border-black"
                   >
                     <option value="Photography">Photography</option>
                     <option value="Videography">Videography</option>
@@ -777,73 +777,73 @@ export default function AdminPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">CLIENT</label>
+                  <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">CLIENT</label>
                   <input
                     type="text"
                     placeholder="Maison Noir"
                     value={projClient}
                     onChange={(e) => setProjClient(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 text-sm focus:outline-none focus:border-black"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">YEAR</label>
+                  <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">YEAR</label>
                   <input
                     type="text"
                     placeholder="2025"
                     value={projYear}
                     onChange={(e) => setProjYear(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 text-sm focus:outline-none focus:border-black"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">DESCRIPTION *</label>
+                <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">DESCRIPTION *</label>
                 <textarea
                   required
                   rows={3}
                   placeholder="Project details..."
                   value={projDesc}
                   onChange={(e) => setProjDesc(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 text-sm resize-none focus:outline-none focus:border-black"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">TAGS (COMMA SEPARATED)</label>
+                <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">TAGS (COMMA SEPARATED)</label>
                 <input
                   type="text"
                   placeholder="Brand Photography, Editorial"
                   value={projTags}
                   onChange={(e) => setProjTags(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 text-sm focus:outline-none focus:border-black"
                 />
               </div>
 
               {/* Cover Image Upload */}
               <div>
-                <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">MAIN COVER IMAGE UPLOAD</label>
-                <div className="border border-dashed border-zinc-800 p-4 rounded-xl text-center relative bg-zinc-950">
+                <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">MAIN COVER IMAGE UPLOAD</label>
+                <div className="border border-dashed border-zinc-300 p-4 rounded-xl text-center relative bg-zinc-50">
                   <input type="file" accept="image/*" onChange={handleProjectImageUpload} className="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
                   {uploadingProj ? (
                     <div className="flex items-center justify-center gap-2 py-2">
-                      <Loader2 className="w-5 h-5 animate-spin text-white" />
-                      <span className="text-xs font-mono text-zinc-400">Uploading cover image...</span>
+                      <Loader2 className="w-5 h-5 animate-spin text-zinc-900" />
+                      <span className="text-xs font-mono text-zinc-600">Uploading cover image...</span>
                     </div>
                   ) : projImageUrl ? (
                     <div className="flex items-center justify-between p-1">
-                      <img src={projImageUrl} alt="Cover Preview" className="h-12 rounded object-cover border border-zinc-700" />
-                      <span className="text-xs text-green-400 font-mono flex items-center gap-1">
+                      <img src={projImageUrl} alt="Cover Preview" className="h-12 rounded object-cover border border-zinc-300" />
+                      <span className="text-xs text-green-600 font-mono flex items-center gap-1">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         Cover Uploaded
                       </span>
                     </div>
                   ) : (
                     <div className="flex flex-col items-center gap-1">
-                      <Upload className="w-6 h-6 text-zinc-500" />
-                      <span className="text-xs text-zinc-400 font-medium">Click to select primary cover image</span>
+                      <Upload className="w-6 h-6 text-zinc-400" />
+                      <span className="text-xs text-zinc-600 font-medium">Click to select primary cover image</span>
                     </div>
                   )}
                 </div>
@@ -852,7 +852,7 @@ export default function AdminPage() {
               {/* Gallery Images Upload (Max 5 images) */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs uppercase font-mono text-zinc-400">
+                  <label className="block text-xs uppercase font-mono text-zinc-600">
                     PROJECT GALLERY IMAGES ({projGalleryImages.length}/{projCategory === 'Videography' && projVideoUrl ? 3 : 5} MAX)
                   </label>
                   <span className="text-[10px] text-zinc-500 font-mono">Max 5 image previews</span>
@@ -860,7 +860,7 @@ export default function AdminPage() {
 
                 {/* Upload Trigger Area */}
                 {projGalleryImages.length < (projCategory === 'Videography' && projVideoUrl ? 3 : 5) && (
-                  <div className="border border-dashed border-zinc-800 p-3.5 rounded-xl text-center relative bg-zinc-950/60 hover:border-zinc-700 transition-colors mb-3">
+                  <div className="border border-dashed border-zinc-300 p-3.5 rounded-xl text-center relative bg-zinc-50 hover:border-zinc-400 transition-colors mb-3">
                     <input
                       type="file"
                       accept="image/*"
@@ -870,13 +870,13 @@ export default function AdminPage() {
                     />
                     {uploadingGallery ? (
                       <div className="flex items-center justify-center gap-2 py-1">
-                        <Loader2 className="w-4 h-4 animate-spin text-white" />
-                        <span className="text-xs font-mono text-zinc-400">Uploading gallery images...</span>
+                        <Loader2 className="w-4 h-4 animate-spin text-zinc-900" />
+                        <span className="text-xs font-mono text-zinc-600">Uploading gallery images...</span>
                       </div>
                     ) : (
                       <div className="flex items-center justify-center gap-2">
-                        <Plus className="w-4 h-4 text-zinc-400" />
-                        <span className="text-xs text-zinc-400">Add Showcase Images to Gallery</span>
+                        <Plus className="w-4 h-4 text-zinc-500" />
+                        <span className="text-xs text-zinc-600">Add Showcase Images to Gallery</span>
                       </div>
                     )}
                   </div>
@@ -886,7 +886,7 @@ export default function AdminPage() {
                 {projGalleryImages.length > 0 && (
                   <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 pt-1">
                     {projGalleryImages.map((imgUrl, index) => (
-                      <div key={index} className="relative group aspect-square rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900">
+                      <div key={index} className="relative group aspect-square rounded-xl overflow-hidden border border-zinc-200 bg-zinc-100">
                         <img src={imgUrl} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
                         <button
                           type="button"
@@ -896,7 +896,7 @@ export default function AdminPage() {
                         >
                           <X className="w-3 h-3" />
                         </button>
-                        <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/80 text-[9px] font-mono text-zinc-300">
+                        <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/80 text-[9px] font-mono text-white">
                           #{index + 1}
                         </span>
                       </div>
@@ -907,18 +907,18 @@ export default function AdminPage() {
 
               {/* Videography Category Special Section */}
               {projCategory === 'Videography' && (
-                <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-white">
-                    <Video className="w-4 h-4 text-white" />
+                <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-900">
+                    <Video className="w-4 h-4 text-zinc-900" />
                     <span>VIDEOGRAPHY PROJECT MEDIA OPTIONS (OPTIONAL)</span>
                   </div>
 
-                  <p className="text-xs text-zinc-400 font-light">
+                  <p className="text-xs text-zinc-600 font-light">
                     Upload an optional video file or paste a video link alongside up to 3 showcase gallery images.
                   </p>
 
                   <div className="space-y-3">
-                    <div className="border border-dashed border-zinc-800 p-3 rounded-xl text-center relative bg-zinc-900/50">
+                    <div className="border border-dashed border-zinc-300 p-3 rounded-xl text-center relative bg-white">
                       <input
                         type="file"
                         accept="video/mp4,video/webm,video/ogg"
@@ -927,24 +927,24 @@ export default function AdminPage() {
                       />
                       {uploadingVideo ? (
                         <div className="flex items-center justify-center gap-2 py-1">
-                          <Loader2 className="w-4 h-4 animate-spin text-white" />
-                          <span className="text-xs font-mono text-zinc-400">Uploading video file...</span>
+                          <Loader2 className="w-4 h-4 animate-spin text-zinc-900" />
+                          <span className="text-xs font-mono text-zinc-600">Uploading video file...</span>
                         </div>
                       ) : projVideoUrl ? (
                         <div className="flex items-center justify-between p-1">
-                          <span className="text-xs text-green-400 font-mono truncate max-w-[200px]">Video Uploaded</span>
+                          <span className="text-xs text-green-600 font-mono truncate max-w-[200px]">Video Uploaded</span>
                           <button
                             type="button"
                             onClick={() => setProjVideoUrl('')}
-                            className="text-xs text-red-400 hover:underline"
+                            className="text-xs text-red-600 hover:underline cursor-pointer"
                           >
                             Remove Video
                           </button>
                         </div>
                       ) : (
                         <div className="flex items-center justify-center gap-2">
-                          <Film className="w-4 h-4 text-zinc-400" />
-                          <span className="text-xs text-zinc-400">Upload Video File (MP4/WebM)</span>
+                          <Film className="w-4 h-4 text-zinc-500" />
+                          <span className="text-xs text-zinc-600">Upload Video File (MP4/WebM)</span>
                         </div>
                       )}
                     </div>
@@ -956,12 +956,12 @@ export default function AdminPage() {
                         placeholder="https://commondatastorage.googleapis.com/... or https://..."
                         value={projVideoUrl}
                         onChange={(e) => setProjVideoUrl(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-xs placeholder-zinc-600 focus:outline-none focus:border-white"
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-zinc-200 text-zinc-900 text-xs placeholder-zinc-400 focus:outline-none focus:border-black"
                       />
                     </div>
 
                     {projVideoUrl && (
-                      <div className="mt-2 rounded-xl overflow-hidden border border-zinc-800 bg-black aspect-video">
+                      <div className="mt-2 rounded-xl overflow-hidden border border-zinc-200 bg-black aspect-video">
                         <video src={projVideoUrl} controls className="w-full h-full object-cover" />
                       </div>
                     )}
@@ -969,17 +969,17 @@ export default function AdminPage() {
                 </div>
               )}
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-900">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-100">
                 <button
                   type="button"
                   onClick={() => setShowAddProjectModal(false)}
-                  className="px-6 py-2.5 rounded-full text-xs font-mono uppercase text-zinc-400 hover:text-white"
+                  className="px-6 py-2.5 rounded-full text-xs font-mono uppercase text-zinc-600 hover:text-black cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-8 py-2.5 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider hover:bg-zinc-200 cursor-pointer"
+                  className="px-8 py-2.5 rounded-full bg-black text-white font-semibold text-xs uppercase tracking-wider hover:bg-zinc-800 cursor-pointer shadow-lg shadow-black/10"
                 >
                   Publish Project
                 </button>
@@ -991,68 +991,68 @@ export default function AdminPage() {
 
       {/* Add Review Modal */}
       {showAddReviewModal && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md p-4 flex items-center justify-center">
-          <div className="max-w-md w-full bg-[#09090b] border border-zinc-800 rounded-3xl p-8 space-y-6">
-            <h2 className="text-2xl font-black uppercase text-white">ADD CLIENT TESTIMONIAL</h2>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md p-4 flex items-center justify-center">
+          <div className="max-w-md w-full bg-white border border-zinc-200 rounded-3xl p-8 space-y-6 shadow-2xl">
+            <h2 className="text-2xl font-black uppercase text-zinc-900">ADD CLIENT TESTIMONIAL</h2>
 
             <form onSubmit={handleCreateReview} className="space-y-4">
               <div>
-                <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">CLIENT NAME *</label>
+                <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">CLIENT NAME *</label>
                 <input
                   type="text"
                   required
                   placeholder="Evelyn Vance"
                   value={revAuthor}
                   onChange={(e) => setRevAuthor(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 text-sm focus:outline-none focus:border-black"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">ROLE / BRAND</label>
+                <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">ROLE / BRAND</label>
                 <input
                   type="text"
                   placeholder="Marketing Director, Maison Noir"
                   value={revRole}
                   onChange={(e) => setRevRole(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 text-sm focus:outline-none focus:border-black"
                 />
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">RATING</label>
+                <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">RATING</label>
                 <div className="flex items-center gap-2 py-1">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button key={star} type="button" onClick={() => setRevRating(star)} className="cursor-pointer">
-                      <Star className={`w-5 h-5 ${star <= revRating ? 'text-white fill-white' : 'text-zinc-700'}`} />
+                      <Star className={`w-5 h-5 ${star <= revRating ? 'text-zinc-900 fill-zinc-900' : 'text-zinc-300'}`} />
                     </button>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs uppercase font-mono text-zinc-400 mb-1">TESTIMONIAL CONTENT *</label>
+                <label className="block text-xs uppercase font-mono text-zinc-600 mb-1">TESTIMONIAL CONTENT *</label>
                 <textarea
                   required
                   rows={4}
                   placeholder="Client feedback..."
                   value={revContent}
                   onChange={(e) => setRevContent(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-900 border border-zinc-800 text-white text-sm resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 text-sm resize-none focus:outline-none focus:border-black"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-900">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-100">
                 <button
                   type="button"
                   onClick={() => setShowAddReviewModal(false)}
-                  className="px-6 py-2.5 rounded-full text-xs font-mono uppercase text-zinc-400 hover:text-white"
+                  className="px-6 py-2.5 rounded-full text-xs font-mono uppercase text-zinc-600 hover:text-black cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-8 py-2.5 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-wider hover:bg-zinc-200 cursor-pointer"
+                  className="px-8 py-2.5 rounded-full bg-black text-white font-semibold text-xs uppercase tracking-wider hover:bg-zinc-800 cursor-pointer shadow-lg shadow-black/10"
                 >
                   Publish Testimonial
                 </button>

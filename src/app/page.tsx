@@ -52,7 +52,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#09090b] text-white overflow-x-hidden selection:bg-white selection:text-black">
+    <main className="min-h-screen bg-white text-zinc-900 overflow-x-hidden selection:bg-black selection:text-white">
       {/* Animated Screen Preloader */}
       <Preloader />
 

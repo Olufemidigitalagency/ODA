@@ -68,18 +68,18 @@ export function ServicesSection({ onOpenVisionModal }: { onOpenVisionModal?: () 
   ];
 
   return (
-    <section id="services" className="py-24 px-6 md:px-12 bg-[#09090b] relative border-t border-zinc-900">
+    <section id="services" className="py-24 px-6 md:px-12 bg-white relative border-t border-zinc-200/80">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div>
-            <span className="text-xs uppercase tracking-[0.3em] font-mono text-zinc-500">OUR SCOPE OF SERVICES</span>
-            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase text-white mt-2">
+            <span className="text-xs uppercase tracking-[0.3em] font-mono text-zinc-500 font-medium">OUR SCOPE OF SERVICES</span>
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase text-zinc-900 mt-2">
               ONE MEDIA <br />
-              <span className="text-zinc-500">PARTNER</span>
+              <span className="text-zinc-400">PARTNER</span>
             </h2>
           </div>
-          <p className="text-zinc-400 text-sm md:text-base max-w-md font-light">
+          <p className="text-zinc-600 text-sm md:text-base max-w-md font-light leading-relaxed">
             Instead of managing scattered freelancers, ODA brings photography, videography, content creation, and graphic design together under one roof.
           </p>
         </div>
@@ -96,16 +96,16 @@ export function ServicesSection({ onOpenVisionModal }: { onOpenVisionModal?: () 
                 <button
                   key={service.id}
                   onClick={() => setActiveService(index)}
-                  className={`w-full text-left p-6 rounded-2xl glass-card transition-all duration-300 flex items-center justify-between group ${
+                  className={`w-full text-left p-6 rounded-2xl transition-all duration-300 flex items-center justify-between group cursor-pointer border ${
                     isActive
-                      ? 'bg-zinc-900 border-white/30 shadow-xl shadow-white/5 scale-[1.02]'
-                      : 'hover:border-zinc-700 opacity-70 hover:opacity-100'
+                      ? 'bg-zinc-900 text-white border-zinc-900 shadow-xl shadow-zinc-900/10 scale-[1.02]'
+                      : 'bg-zinc-50/80 border-zinc-200/80 hover:border-zinc-400 hover:bg-zinc-100/80 text-zinc-700'
                   }`}
                 >
                   <div className="flex items-center gap-4">
-                    <span className="font-mono text-xs text-zinc-500">{service.id}</span>
-                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-zinc-400'}`} />
-                    <h3 className="font-bold text-sm md:text-base uppercase tracking-wider text-white">
+                    <span className={`font-mono text-xs ${isActive ? 'text-zinc-400' : 'text-zinc-400'}`}>{service.id}</span>
+                    <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-900'}`} />
+                    <h3 className={`font-bold text-sm md:text-base uppercase tracking-wider ${isActive ? 'text-white' : 'text-zinc-900'}`}>
                       {service.title}
                     </h3>
                   </div>
@@ -125,13 +125,13 @@ export function ServicesSection({ onOpenVisionModal }: { onOpenVisionModal?: () 
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.4 }}
-                className="p-8 md:p-12 rounded-3xl glass-card border border-zinc-800 bg-gradient-to-b from-zinc-900/90 to-zinc-950 relative overflow-hidden"
+                className="p-8 md:p-12 rounded-3xl border border-zinc-200/90 bg-[#fafafa] relative overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.03)]"
               >
                 <div className="flex items-center justify-between mb-8">
-                  <span className="font-mono text-3xl md:text-5xl font-bold text-zinc-700">
+                  <span className="font-mono text-3xl md:text-5xl font-bold text-zinc-300">
                     {services[activeService].id}
                   </span>
-                  <div className="p-3 rounded-2xl bg-zinc-800 border border-zinc-700 text-white">
+                  <div className="p-3 rounded-2xl bg-white border border-zinc-200 text-zinc-900 shadow-sm">
                     {(() => {
                       const ActiveIcon = services[activeService].icon;
                       return <ActiveIcon className="w-6 h-6" />;
@@ -139,24 +139,24 @@ export function ServicesSection({ onOpenVisionModal }: { onOpenVisionModal?: () 
                   </div>
                 </div>
 
-                <span className="text-[10px] font-mono tracking-widest uppercase text-zinc-400 block mb-1">
+                <span className="text-[10px] font-mono tracking-widest uppercase text-zinc-500 font-medium block mb-1">
                   {services[activeService].tagline}
                 </span>
 
-                <h3 className="text-2xl md:text-4xl font-black uppercase text-white mb-4">
+                <h3 className="text-2xl md:text-4xl font-black uppercase text-zinc-900 mb-4 tracking-tight">
                   {services[activeService].title}
                 </h3>
 
-                <p className="text-zinc-300 text-base md:text-lg font-light leading-relaxed mb-8">
+                <p className="text-zinc-600 text-base md:text-lg font-light leading-relaxed mb-8">
                   {services[activeService].description}
                 </p>
 
-                <div className="space-y-4 pt-6 border-t border-zinc-800">
-                  <p className="text-xs uppercase tracking-widest font-mono text-zinc-500">SCOPE & CAPABILITIES</p>
+                <div className="space-y-4 pt-6 border-t border-zinc-200">
+                  <p className="text-xs uppercase tracking-widest font-mono text-zinc-500 font-medium">SCOPE & CAPABILITIES</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {services[activeService].deliverables.map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2.5 text-xs md:text-sm text-zinc-300 font-light">
-                        <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
+                      <div key={idx} className="flex items-center gap-2.5 text-xs md:text-sm text-zinc-700 font-light">
+                        <CheckCircle2 className="w-4 h-4 text-zinc-900 shrink-0" />
                         <span>{item}</span>
                       </div>
                     ))}
@@ -166,7 +166,7 @@ export function ServicesSection({ onOpenVisionModal }: { onOpenVisionModal?: () 
                 {activeService === 3 && onOpenVisionModal && (
                   <button
                     onClick={onOpenVisionModal}
-                    className="mt-8 w-full py-4 rounded-full bg-white text-black font-semibold text-xs uppercase tracking-widest hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95"
+                    className="mt-8 w-full py-4 rounded-full bg-zinc-900 text-white font-semibold text-xs uppercase tracking-widest hover:bg-black transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 cursor-pointer"
                   >
                     <span>Start Client Vision Questionnaire</span>
                   </button>

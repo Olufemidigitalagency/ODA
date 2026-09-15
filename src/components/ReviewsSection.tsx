@@ -10,17 +10,17 @@ interface ReviewsSectionProps {
 
 export function ReviewsSection({ reviews }: ReviewsSectionProps) {
   return (
-    <section id="reviews" className="py-28 px-6 md:px-12 bg-[#09090b] relative border-t border-zinc-900">
+    <section id="reviews" className="py-28 px-6 md:px-12 bg-white relative border-t border-zinc-200/80">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div>
-            <span className="text-xs uppercase tracking-[0.3em] font-mono text-zinc-500">TESTIMONIALS & REVIEWS</span>
-            <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase text-white mt-2">
-              CLIENT <span className="text-zinc-500">VOICES</span>
+            <span className="text-xs uppercase tracking-[0.3em] font-mono text-zinc-500 font-medium">TESTIMONIALS & REVIEWS</span>
+            <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase text-zinc-900 mt-2">
+              CLIENT <span className="text-zinc-400">VOICES</span>
             </h2>
           </div>
-          <p className="text-zinc-400 text-sm md:text-base max-w-md font-light">
+          <p className="text-zinc-600 text-sm md:text-base max-w-md font-light leading-relaxed">
             Read what brand founders and creative directors say about collaborating with Olufemi Digital Agency.
           </p>
         </div>
@@ -35,9 +35,9 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.12 }}
               whileHover={{ y: -6 }}
-              className="p-8 md:p-10 rounded-3xl glass-card border border-zinc-800/80 flex flex-col justify-between relative group hover:border-zinc-500/80 transition-all duration-500 shadow-xl"
+              className="p-8 md:p-10 rounded-3xl bg-[#fafafa] border border-zinc-200/90 flex flex-col justify-between relative group hover:border-zinc-400 hover:bg-white transition-all duration-500 shadow-[0_4px_25px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]"
             >
-              <Quote className="absolute top-8 right-8 w-10 h-10 text-zinc-800/80 group-hover:text-zinc-600 transition-colors" />
+              <Quote className="absolute top-8 right-8 w-10 h-10 text-zinc-200 group-hover:text-zinc-300 transition-colors" />
 
               <div>
                 {/* Rating Stars */}
@@ -46,29 +46,29 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
                     <Star
                       key={i}
                       className={`w-4 h-4 ${
-                        i < review.rating ? 'text-white fill-white' : 'text-zinc-800'
+                        i < review.rating ? 'text-zinc-900 fill-zinc-900' : 'text-zinc-300'
                       }`}
                     />
                   ))}
                 </div>
 
-                <p className="text-zinc-300 text-sm md:text-base font-light leading-relaxed mb-10 italic">
+                <p className="text-zinc-700 text-sm md:text-base font-light leading-relaxed mb-10 italic">
                   "{review.content}"
                 </p>
               </div>
 
               {/* Author Footer */}
-              <div className="flex items-center gap-4 pt-6 border-t border-zinc-900">
+              <div className="flex items-center gap-4 pt-6 border-t border-zinc-200/80">
                 <img
                   src={review.author_avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop'}
                   alt={review.author_name}
-                  className="w-12 h-12 rounded-full object-cover border border-zinc-700/80 group-hover:border-white transition-colors"
+                  className="w-12 h-12 rounded-full object-cover border border-zinc-300 group-hover:border-zinc-900 transition-colors shadow-sm"
                 />
                 <div>
-                  <h4 className="font-bold text-sm text-white uppercase tracking-wider">
+                  <h4 className="font-bold text-sm text-zinc-900 uppercase tracking-wider">
                     {review.author_name}
                   </h4>
-                  <p className="text-xs font-mono text-zinc-500">{review.author_role}</p>
+                  <p className="text-xs font-mono text-zinc-500 font-medium">{review.author_role}</p>
                 </div>
               </div>
             </motion.div>
