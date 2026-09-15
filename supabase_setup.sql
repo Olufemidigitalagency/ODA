@@ -5,8 +5,48 @@
 -- (Supabase Dashboard -> SQL Editor -> New Query -> Run)
 -- ========================================================
 
--- Enable UUID Extension
+-- Enable UUID & Crypto Extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
+-- --------------------------------------------------------
+-- 0. AUTOMATIC ADMIN USER CREATION IN SUPABASE AUTH
+-- Creates pre-confirmed default admin: admin@oda.studio / oda2025admin
+-- --------------------------------------------------------
+INSERT INTO auth.users (
+    instance_id,
+    id,
+    aud,
+    role,
+    email,
+    encrypted_password,
+    email_confirmed_at,
+    recovery_sent_at,
+    last_sign_in_at,
+    raw_app_meta_data,
+    raw_user_meta_data,
+    is_super_admin,
+    created_at,
+    updated_at
+)
+SELECT
+    '00000000-0000-0000-0000-000000000000',
+    gen_random_uuid(),
+    'authenticated',
+    'authenticated',
+    'admin@oda.studio',
+    crypt('oda2025admin', gen_salt('bf')),
+    now(),
+    now(),
+    now(),
+    '{"provider":"email","providers":["email"]}',
+    '{"full_name":"ODA Admin"}',
+    false,
+    now(),
+    now()
+WHERE NOT EXISTS (
+    SELECT 1 FROM auth.users WHERE email = 'admin@oda.studio'
+);
 
 -- --------------------------------------------------------
 -- 1. PROJECTS TABLE
