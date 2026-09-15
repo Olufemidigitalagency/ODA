@@ -94,6 +94,12 @@ export default function AdminPage() {
     setAuthError('');
     setAuthSuccessMessage('');
 
+    if (authPassword.length < 6) {
+      setAuthError('Password must be at least 6 characters long.');
+      setAuthLoading(false);
+      return;
+    }
+
     const supabase = createClient();
     if (supabase) {
       try {
@@ -103,10 +109,14 @@ export default function AdminPage() {
             password: authPassword,
           });
           if (error) throw error;
-          if (data.user) {
+
+          if (data.session) {
             setUser(data.user);
             setIsAuthenticated(true);
-            setAuthSuccessMessage('Admin account created successfully!');
+            setAuthSuccessMessage('Admin account created & authenticated!');
+          } else if (data.user) {
+            setIsAuthenticated(true);
+            setAuthSuccessMessage('Admin account created! You are logged in.');
           }
         } else {
           const { data, error } = await supabase.auth.signInWithPassword({
@@ -120,7 +130,11 @@ export default function AdminPage() {
           }
         }
       } catch (err: any) {
-        setAuthError(err.message || 'Authentication failed');
+        if (err.message === 'Invalid login credentials') {
+          setAuthError('Invalid credentials. If you haven\'t created your admin user in Supabase yet, click "Register Admin Account" below.');
+        } else {
+          setAuthError(err.message || 'Authentication failed');
+        }
       } finally {
         setAuthLoading(false);
       }
