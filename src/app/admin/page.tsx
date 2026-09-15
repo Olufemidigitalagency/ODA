@@ -65,8 +65,10 @@ export default function AdminPage() {
         }
       });
     } else {
-      // Offline / Demo mode auto-authenticated for testing
-      setIsAuthenticated(true);
+      const localSession = sessionStorage.getItem('oda_admin_session');
+      if (localSession === 'authenticated') {
+        setIsAuthenticated(true);
+      }
     }
     loadData();
   }, []);
@@ -89,26 +91,34 @@ export default function AdminPage() {
     setAuthError('');
 
     const supabase = createClient();
-    if (!supabase) {
-      setIsAuthenticated(true);
-      setAuthLoading(false);
-      return;
-    }
+    if (supabase) {
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: authEmail,
+          password: authPassword,
+        });
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: authEmail,
-        password: authPassword,
-      });
-
-      if (error) throw error;
-      if (data.user) {
-        setUser(data.user);
-        setIsAuthenticated(true);
+        if (error) throw error;
+        if (data.user) {
+          setUser(data.user);
+          setIsAuthenticated(true);
+        }
+      } catch (err: any) {
+        setAuthError(err.message || 'Invalid admin credentials');
+      } finally {
+        setAuthLoading(false);
       }
-    } catch (err: any) {
-      setAuthError(err.message || 'Login failed');
-    } finally {
+    } else {
+      // Secure local credential check when Supabase keys are not set
+      const validEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@oda.studio';
+      const validPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'oda2025admin';
+
+      if (authEmail.trim().toLowerCase() === validEmail.toLowerCase() && authPassword === validPass) {
+        setIsAuthenticated(true);
+        sessionStorage.setItem('oda_admin_session', 'authenticated');
+      } else {
+        setAuthError('Invalid admin email or password');
+      }
       setAuthLoading(false);
     }
   };
@@ -118,6 +128,7 @@ export default function AdminPage() {
     if (supabase) {
       await supabase.auth.signOut();
     }
+    sessionStorage.removeItem('oda_admin_session');
     setUser(null);
     setIsAuthenticated(false);
   };
