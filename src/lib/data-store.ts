@@ -16,9 +16,79 @@ export interface VisionQuestionnaire {
   created_at?: string;
 }
 
+const ODA_PROJECTS_KEY = 'oda_projects_data_v4';
+const ODA_REVIEWS_KEY = 'oda_reviews_data_v4';
+const ODA_QUESTIONNAIRES_KEY = 'oda_questionnaires_data_v4';
+
+const ODA_DELETED_PROJECTS_KEY = 'oda_deleted_projects_v4';
+const ODA_DELETED_REVIEWS_KEY = 'oda_deleted_reviews_v4';
+const ODA_DELETED_QUESTIONNAIRES_KEY = 'oda_deleted_questionnaires_v4';
+
+function getLocalData<T>(key: string, fallback: T): T {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored !== null) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        return parsed as T;
+      }
+    }
+  } catch (e) {
+    console.warn(`Error reading ${key} from localStorage`, e);
+  }
+  try {
+    localStorage.setItem(key, JSON.stringify(fallback));
+  } catch (e) {}
+  return fallback;
+}
+
+function setLocalData<T>(key: string, data: T): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (e) {
+    console.warn(`Error saving ${key} to localStorage`, e);
+  }
+}
+
+function getDeletedIds(key: string): string[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) return parsed as string[];
+    }
+  } catch (e) {}
+  return [];
+}
+
+function addDeletedId(key: string, id: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const current = getDeletedIds(key);
+    if (!current.includes(id)) {
+      current.push(id);
+      localStorage.setItem(key, JSON.stringify(current));
+    }
+  } catch (e) {}
+}
+
+function generateUUID(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export const INITIAL_PROJECTS: Project[] = [
   {
-    id: '1',
+    id: '10000000-0000-4000-a000-000000000001',
     title: 'LUXURY BRAND CAMPAIGN',
     slug: 'luxury-brand-campaign',
     category: 'Photography',
@@ -36,7 +106,7 @@ export const INITIAL_PROJECTS: Project[] = [
     featured: true
   },
   {
-    id: '2',
+    id: '10000000-0000-4000-a000-000000000002',
     title: 'CORPORATE HIGHLIGHTS FILM',
     slug: 'corporate-highlights-film',
     category: 'Videography',
@@ -54,7 +124,7 @@ export const INITIAL_PROJECTS: Project[] = [
     featured: true
   },
   {
-    id: '3',
+    id: '10000000-0000-4000-a000-000000000003',
     title: 'BRAND IDENT & FLYER SYSTEM',
     slug: 'brand-ident-flyer-system',
     category: 'Graphic Design',
@@ -70,7 +140,7 @@ export const INITIAL_PROJECTS: Project[] = [
     featured: true
   },
   {
-    id: '4',
+    id: '10000000-0000-4000-a000-000000000004',
     title: 'BEHIND THE SCENES DOCUMENTARY',
     slug: 'behind-the-scenes-doc',
     category: 'Videography',
@@ -86,7 +156,7 @@ export const INITIAL_PROJECTS: Project[] = [
     featured: false
   },
   {
-    id: '5',
+    id: '10000000-0000-4000-a000-000000000005',
     title: 'E-COMMERCE PRODUCT CATALOG',
     slug: 'e-commerce-product-catalog',
     category: 'Photography',
@@ -102,7 +172,7 @@ export const INITIAL_PROJECTS: Project[] = [
     featured: true
   },
   {
-    id: '6',
+    id: '10000000-0000-4000-a000-000000000006',
     title: 'SOCIAL MEDIA CAROUSELS',
     slug: 'social-media-carousels',
     category: 'Graphic Design',
@@ -120,76 +190,292 @@ export const INITIAL_PROJECTS: Project[] = [
 
 export const INITIAL_REVIEWS: Review[] = [
   {
-    id: 'r1',
+    id: 'e1d2c3b4-a5b6-7c8d-9e0f-1a2b3c4d5e6f',
     author_name: 'Evelyn Vance',
     author_role: 'Marketing Director, Maison Noir',
     author_avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop',
     content: 'ODA (Olufemi Digital Agency) is truly our one-stop media partner. Their Client Vision Questionnaire helped us organize our thoughts effortlessly, and the photography and video campaign exceeded our highest expectations.',
-    rating: 5
+    rating: 5,
+    approved: true
   },
   {
-    id: 'r2',
+    id: 'f2e3d4c5-b6a7-8d9e-0f1a-2b3c4d5e6f7a',
     author_name: 'Marcus Thorne',
     author_role: 'Head of Communications, TechSummit',
     author_avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop',
     content: 'Having videography, photography, and graphic design delivered seamlessly by one team made our corporate event coverage stress-free. ODA understands before they create.',
-    rating: 5
+    rating: 5,
+    approved: true
   },
   {
-    id: 'r3',
+    id: 'a3b4c5d6-e7f8-9a0b-1c2d-3e4f5a6b7c8d',
     author_name: 'Sora Takahashi',
     author_role: 'Founder, Aura Beauty',
     author_avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=400&auto=format&fit=crop',
     content: 'The product photos and campaign videos ODA produced elevated our online store presence immediately. Professionalism and reliability at its finest!',
-    rating: 5
+    rating: 5,
+    approved: true
   }
 ];
 
+// ----------------------------------------------------
+// PROJECTS DATA API (SUPABASE + LOCALSTORAGE BACKUP)
+// ----------------------------------------------------
 export async function fetchProjects(): Promise<Project[]> {
+  const deletedIds = getDeletedIds(ODA_DELETED_PROJECTS_KEY);
   const supabase = createClient();
+  let items: Project[] = [];
+
   if (supabase) {
     try {
       const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
       if (!error && data && data.length > 0) {
-        return data as Project[];
+        items = data as Project[];
       }
     } catch (err) {
-      console.warn('Supabase fetch failed, fallback to local data', err);
+      console.warn('Supabase fetch projects warning', err);
     }
   }
-  return INITIAL_PROJECTS;
+
+  if (items.length === 0) {
+    items = getLocalData<Project[]>(ODA_PROJECTS_KEY, INITIAL_PROJECTS);
+  } else {
+    const local = getLocalData<Project[]>(ODA_PROJECTS_KEY, []);
+    const merged = [...items];
+    local.forEach((lp) => {
+      if (!merged.some((p) => p.id === lp.id)) {
+        merged.push(lp);
+      }
+    });
+    items = merged;
+    setLocalData(ODA_PROJECTS_KEY, items);
+  }
+
+  return items.filter((p) => !deletedIds.includes(p.id));
 }
 
-export async function fetchReviews(): Promise<Review[]> {
+export async function saveProjectToDatabase(newProject: Omit<Project, 'id'>): Promise<Project> {
   const supabase = createClient();
+  const projectId = generateUUID();
+  const projectToSave = { ...newProject, id: projectId };
+
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.from('projects').insert([projectToSave]).select().single();
+      if (!error && data) {
+        const current = getLocalData<Project[]>(ODA_PROJECTS_KEY, INITIAL_PROJECTS);
+        const updated = [data as Project, ...current];
+        setLocalData(ODA_PROJECTS_KEY, updated);
+        return data as Project;
+      }
+    } catch (e) {
+      console.warn('Failed to insert project into Supabase', e);
+    }
+  }
+
+  const current = getLocalData<Project[]>(ODA_PROJECTS_KEY, INITIAL_PROJECTS);
+  const created: Project = {
+    ...newProject,
+    id: projectId,
+    created_at: new Date().toISOString()
+  };
+  const updated = [created, ...current];
+  setLocalData(ODA_PROJECTS_KEY, updated);
+  return created;
+}
+
+export async function deleteProjectFromDatabase(id: string): Promise<boolean> {
+  addDeletedId(ODA_DELETED_PROJECTS_KEY, id);
+
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      await supabase.from('projects').delete().eq('id', id);
+    } catch (e) {
+      console.warn('Failed to delete project from Supabase', e);
+    }
+  }
+
+  const current = getLocalData<Project[]>(ODA_PROJECTS_KEY, INITIAL_PROJECTS);
+  const filtered = current.filter((p) => p.id !== id);
+  setLocalData(ODA_PROJECTS_KEY, filtered);
+  return true;
+}
+
+export async function updateProjectInDatabase(id: string, updatedFields: Partial<Project>): Promise<Project | null> {
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .update(updatedFields)
+        .eq('id', id)
+        .select()
+        .single();
+      if (!error && data) {
+        const current = getLocalData<Project[]>(ODA_PROJECTS_KEY, INITIAL_PROJECTS);
+        const updated = current.map((p) => (p.id === id ? (data as Project) : p));
+        setLocalData(ODA_PROJECTS_KEY, updated);
+        return data as Project;
+      }
+    } catch (e) {
+      console.warn('Failed to update project in Supabase', e);
+    }
+  }
+
+  const current = getLocalData<Project[]>(ODA_PROJECTS_KEY, INITIAL_PROJECTS);
+  let updatedProj: Project | null = null;
+  const updated = current.map((p) => {
+    if (p.id === id) {
+      updatedProj = { ...p, ...updatedFields };
+      return updatedProj;
+    }
+    return p;
+  });
+  setLocalData(ODA_PROJECTS_KEY, updated);
+  return updatedProj;
+}
+
+// ----------------------------------------------------
+// REVIEWS DATA API (SUPABASE + LOCALSTORAGE BACKUP)
+// ----------------------------------------------------
+export async function fetchReviews(): Promise<Review[]> {
+  const deletedIds = getDeletedIds(ODA_DELETED_REVIEWS_KEY);
+  const supabase = createClient();
+  let items: Review[] = [];
+
   if (supabase) {
     try {
       const { data, error } = await supabase.from('reviews').select('*').order('created_at', { ascending: false });
       if (!error && data && data.length > 0) {
-        return data as Review[];
+        items = data as Review[];
       }
     } catch (err) {
-      console.warn('Supabase fetch failed, fallback to local data', err);
+      console.warn('Supabase fetch reviews warning', err);
     }
   }
-  return INITIAL_REVIEWS;
+
+  if (items.length === 0) {
+    items = getLocalData<Review[]>(ODA_REVIEWS_KEY, INITIAL_REVIEWS);
+  } else {
+    const local = getLocalData<Review[]>(ODA_REVIEWS_KEY, []);
+    const merged = [...items];
+    local.forEach((lr) => {
+      if (!merged.some((r) => r.id === lr.id)) {
+        merged.push(lr);
+      }
+    });
+    items = merged;
+    setLocalData(ODA_REVIEWS_KEY, items);
+  }
+
+  return items.filter((r) => !deletedIds.includes(r.id));
 }
 
-export async function fetchVisionQuestionnaires(): Promise<VisionQuestionnaire[]> {
+export async function saveReviewToDatabase(newReview: Omit<Review, 'id'>): Promise<Review> {
+  const supabase = createClient();
+  const reviewId = generateUUID();
+  const reviewToSave = {
+    ...newReview,
+    id: reviewId,
+    approved: newReview.approved ?? true,
+    created_at: new Date().toISOString()
+  };
+
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.from('reviews').insert([reviewToSave]).select().single();
+      if (!error && data) {
+        const current = getLocalData<Review[]>(ODA_REVIEWS_KEY, INITIAL_REVIEWS);
+        const updated = [data as Review, ...current];
+        setLocalData(ODA_REVIEWS_KEY, updated);
+        return data as Review;
+      }
+    } catch (e) {
+      console.warn('Failed to insert review into Supabase', e);
+    }
+  }
+
+  const current = getLocalData<Review[]>(ODA_REVIEWS_KEY, INITIAL_REVIEWS);
+  const updated = [reviewToSave, ...current];
+  setLocalData(ODA_REVIEWS_KEY, updated);
+  return reviewToSave;
+}
+
+export async function updateReviewInDatabase(id: string, updatedFields: Partial<Review>): Promise<Review | null> {
   const supabase = createClient();
   if (supabase) {
     try {
-      const { data, error } = await supabase.from('vision_questionnaires').select('*').order('created_at', { ascending: false });
+      const { data, error } = await supabase
+        .from('reviews')
+        .update(updatedFields)
+        .eq('id', id)
+        .select()
+        .single();
       if (!error && data) {
-        return data as VisionQuestionnaire[];
+        const current = getLocalData<Review[]>(ODA_REVIEWS_KEY, INITIAL_REVIEWS);
+        const updated = current.map((r) => (r.id === id ? (data as Review) : r));
+        setLocalData(ODA_REVIEWS_KEY, updated);
+        return data as Review;
       }
-    } catch (err) {
-      console.warn('Supabase fetch questionnaires failed', err);
+    } catch (e) {
+      console.warn('Failed to update review in Supabase', e);
     }
   }
-  return [
+
+  const current = getLocalData<Review[]>(ODA_REVIEWS_KEY, INITIAL_REVIEWS);
+  let updatedReview: Review | null = null;
+  const updated = current.map((r) => {
+    if (r.id === id) {
+      updatedReview = { ...r, ...updatedFields };
+      return updatedReview;
+    }
+    return r;
+  });
+  setLocalData(ODA_REVIEWS_KEY, updated);
+  return updatedReview;
+}
+
+export async function deleteReviewFromDatabase(id: string): Promise<boolean> {
+  addDeletedId(ODA_DELETED_REVIEWS_KEY, id);
+
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      await supabase.from('reviews').delete().eq('id', id);
+    } catch (e) {
+      console.warn('Failed to delete review from Supabase', e);
+    }
+  }
+
+  const current = getLocalData<Review[]>(ODA_REVIEWS_KEY, INITIAL_REVIEWS);
+  const filtered = current.filter((r) => r.id !== id);
+  setLocalData(ODA_REVIEWS_KEY, filtered);
+  return true;
+}
+
+// ----------------------------------------------------
+// VISION QUESTIONNAIRE BRIEFS API
+// ----------------------------------------------------
+export async function fetchVisionQuestionnaires(): Promise<VisionQuestionnaire[]> {
+  const deletedIds = getDeletedIds(ODA_DELETED_QUESTIONNAIRES_KEY);
+  const supabase = createClient();
+  let items: VisionQuestionnaire[] = [];
+
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.from('vision_questionnaires').select('*').order('created_at', { ascending: false });
+      if (!error && data && data.length > 0) {
+        items = data as VisionQuestionnaire[];
+      }
+    } catch (err) {
+      console.warn('Supabase fetch questionnaires warning', err);
+    }
+  }
+
+  const initialBriefs: VisionQuestionnaire[] = [
     {
-      id: 'q1',
+      id: 'q1000000-0000-4000-a000-000000000001',
       client_name: 'Evelyn Vance',
       email: 'evelyn@maisonnoir.com',
       brand_name: 'Maison Noir',
@@ -201,6 +487,67 @@ export async function fetchVisionQuestionnaires(): Promise<VisionQuestionnaire[]
       created_at: new Date().toISOString()
     }
   ];
+
+  if (items.length === 0) {
+    items = getLocalData<VisionQuestionnaire[]>(ODA_QUESTIONNAIRES_KEY, initialBriefs);
+  } else {
+    const local = getLocalData<VisionQuestionnaire[]>(ODA_QUESTIONNAIRES_KEY, []);
+    const merged = [...items];
+    local.forEach((lq) => {
+      if (!merged.some((q) => q.id === lq.id)) {
+        merged.push(lq);
+      }
+    });
+    items = merged;
+    setLocalData(ODA_QUESTIONNAIRES_KEY, items);
+  }
+
+  return items.filter((q) => !deletedIds.includes(q.id));
+}
+
+export async function saveVisionQuestionnaire(data: Omit<VisionQuestionnaire, 'id'>): Promise<boolean> {
+  const supabase = createClient();
+  const qId = generateUUID();
+  const qToSave: VisionQuestionnaire = {
+    ...data,
+    id: qId,
+    created_at: new Date().toISOString()
+  };
+
+  if (supabase) {
+    try {
+      const { error } = await supabase.from('vision_questionnaires').insert([qToSave]);
+      if (!error) {
+        const current = getLocalData<VisionQuestionnaire[]>(ODA_QUESTIONNAIRES_KEY, []);
+        setLocalData(ODA_QUESTIONNAIRES_KEY, [qToSave, ...current]);
+        return true;
+      }
+    } catch (e) {
+      console.warn('Failed to insert vision questionnaire into Supabase', e);
+    }
+  }
+
+  const current = getLocalData<VisionQuestionnaire[]>(ODA_QUESTIONNAIRES_KEY, []);
+  setLocalData(ODA_QUESTIONNAIRES_KEY, [qToSave, ...current]);
+  return true;
+}
+
+export async function deleteQuestionnaireFromDatabase(id: string): Promise<boolean> {
+  addDeletedId(ODA_DELETED_QUESTIONNAIRES_KEY, id);
+
+  const supabase = createClient();
+  if (supabase) {
+    try {
+      await supabase.from('vision_questionnaires').delete().eq('id', id);
+    } catch (e) {
+      console.warn('Failed to delete questionnaire', e);
+    }
+  }
+
+  const current = getLocalData<VisionQuestionnaire[]>(ODA_QUESTIONNAIRES_KEY, []);
+  const filtered = current.filter((item) => item.id !== id);
+  setLocalData(ODA_QUESTIONNAIRES_KEY, filtered);
+  return true;
 }
 
 export async function uploadMediaFile(file: File): Promise<string> {
@@ -231,95 +578,4 @@ export async function uploadMediaFile(file: File): Promise<string> {
     reader.onloadend = () => resolve(reader.result as string);
     reader.readAsDataURL(file);
   });
-}
-
-export async function saveProjectToDatabase(newProject: Omit<Project, 'id'>): Promise<Project> {
-  const supabase = createClient();
-  if (supabase) {
-    try {
-      const { data, error } = await supabase.from('projects').insert([newProject]).select().single();
-      if (!error && data) {
-        return data as Project;
-      }
-    } catch (e) {
-      console.warn('Failed to insert project into Supabase', e);
-    }
-  }
-
-  return {
-    ...newProject,
-    id: `p-${Date.now()}`
-  };
-}
-
-export async function deleteProjectFromDatabase(id: string): Promise<boolean> {
-  const supabase = createClient();
-  if (supabase) {
-    try {
-      const { error } = await supabase.from('projects').delete().eq('id', id);
-      if (!error) return true;
-    } catch (e) {
-      console.warn('Failed to delete project', e);
-    }
-  }
-  return true;
-}
-
-export async function saveReviewToDatabase(newReview: Omit<Review, 'id'>): Promise<Review> {
-  const supabase = createClient();
-  if (supabase) {
-    try {
-      const { data, error } = await supabase.from('reviews').insert([newReview]).select().single();
-      if (!error && data) {
-        return data as Review;
-      }
-    } catch (e) {
-      console.warn('Failed to insert review into Supabase', e);
-    }
-  }
-
-  return {
-    ...newReview,
-    id: `r-${Date.now()}`
-  };
-}
-
-export async function deleteReviewFromDatabase(id: string): Promise<boolean> {
-  const supabase = createClient();
-  if (supabase) {
-    try {
-      const { error } = await supabase.from('reviews').delete().eq('id', id);
-      if (!error) return true;
-    } catch (e) {
-      console.warn('Failed to delete review', e);
-    }
-  }
-  return true;
-}
-
-export async function saveVisionQuestionnaire(data: Omit<VisionQuestionnaire, 'id'>): Promise<boolean> {
-  const supabase = createClient();
-  if (supabase) {
-    try {
-      const { error } = await supabase.from('vision_questionnaires').insert([data]);
-      if (!error) return true;
-    } catch (e) {
-      console.warn('Failed to insert vision questionnaire into Supabase', e);
-    }
-  }
-
-  return true;
-}
-
-export async function deleteQuestionnaireFromDatabase(id: string): Promise<boolean> {
-  const supabase = createClient();
-  if (supabase) {
-    try {
-      const { error } = await supabase.from('vision_questionnaires').delete().eq('id', id);
-      if (!error) return true;
-    } catch (e) {
-      console.warn('Failed to delete questionnaire', e);
-    }
-  }
-  return true;
 }

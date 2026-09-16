@@ -22,7 +22,7 @@ export default function Home() {
   // Vision Brief Modal
   const [isVisionModalOpen, setIsVisionModalOpen] = useState(false);
 
-  // Initial Data Load
+  // Initial Data Load & Auto Sync on Focus
   useEffect(() => {
     async function loadData() {
       const [projData, revData] = await Promise.all([
@@ -34,6 +34,14 @@ export default function Home() {
     }
     loadData();
 
+    // Re-sync data when returning to landing page tab or after admin updates
+    const handleSync = () => {
+      loadData();
+    };
+
+    window.addEventListener('focus', handleSync);
+    window.addEventListener('storage', handleSync);
+
     // Check Supabase session
     const supabase = createClient();
     if (supabase) {
@@ -41,6 +49,11 @@ export default function Home() {
         if (data?.user) setUser(data.user);
       });
     }
+
+    return () => {
+      window.removeEventListener('focus', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
   }, []);
 
   const handleSignOut = async () => {

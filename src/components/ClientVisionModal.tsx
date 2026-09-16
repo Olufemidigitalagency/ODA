@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, ArrowLeft, Check, Camera, Video, Palette, Layers, CheckCircle2 } from 'lucide-react';
+import { X, ArrowRight, ArrowLeft, Check, Camera, Video, Palette, Layers, CheckCircle2, MessageSquare, Send } from 'lucide-react';
 import { saveVisionQuestionnaire } from '../lib/data-store';
 
 interface ClientVisionModalProps {
@@ -37,10 +37,36 @@ export function ClientVisionModal({ isOpen, onClose }: ClientVisionModalProps) {
     );
   };
 
+  const formatVisionBriefForWhatsApp = () => {
+    const servicesList = selectedServices.length > 0 ? selectedServices.join(', ') : 'Custom Media Package';
+
+    return `✓ *ODA CLIENT VISION BRIEF*
+
+✓ *CLIENT INFORMATION*
+• *Name:* ${clientName}
+• *Email:* ${email}
+• *Phone:* ${phone || 'Not provided'}
+• *Brand/Business:* ${brandName || 'Not specified'}
+
+✓ *SERVICES REQUESTED*
+• ${servicesList}
+
+✓ *VISION & CREATIVE DIRECTION*
+${visionDescription}
+
+✓ *TARGET AUDIENCE*
+• ${targetAudience || 'Not specified'}
+
+✓ *BUDGET & TIMELINE*
+• *Estimated Budget:* ${estimatedBudget || 'Custom'}
+• *Preferred Timeline:* ${preferredTimeline || 'Within 2-4 Weeks'}`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Save to database & local storage for Admin dashboard
     await saveVisionQuestionnaire({
       client_name: clientName,
       email,
@@ -52,6 +78,14 @@ export function ClientVisionModal({ isOpen, onClose }: ClientVisionModalProps) {
       estimated_budget: estimatedBudget,
       preferred_timeline: preferredTimeline,
     });
+
+    // Format & redirect directly to WhatsApp
+    const message = formatVisionBriefForWhatsApp();
+    const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '2348068957236';
+    const cleanNumber = whatsappNumber.replace(/[^0-9]/g, '');
+    const whatsappUrl = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, '_blank');
 
     setIsSubmitting(false);
     setIsSubmitted(true);
@@ -332,8 +366,8 @@ export function ClientVisionModal({ isOpen, onClose }: ClientVisionModalProps) {
                         disabled={isSubmitting || !clientName || !email}
                         className="px-8 py-3.5 rounded-full bg-black text-white font-semibold text-xs uppercase tracking-wider flex items-center gap-2 hover:bg-zinc-800 transition-all disabled:opacity-40 shadow-lg active:scale-95 cursor-pointer"
                       >
-                        <span>{isSubmitting ? 'Submitting...' : 'Submit Vision Brief'}</span>
-                        <Check className="w-4 h-4" />
+                        <span>{isSubmitting ? 'Sending...' : 'Send Vision via WhatsApp'}</span>
+                        <Send className="w-4 h-4" />
                       </button>
                     </div>
                   </motion.div>
@@ -341,8 +375,8 @@ export function ClientVisionModal({ isOpen, onClose }: ClientVisionModalProps) {
               </form>
             </div>
           ) : (
-            <div className="py-12 text-center space-y-6">
-              <div className="w-16 h-16 rounded-full bg-black text-white flex items-center justify-center mx-auto shadow-2xl shadow-black/20">
+            <div className="py-10 text-center space-y-6">
+              <div className="w-16 h-16 rounded-full bg-green-50 border border-green-200 text-green-600 flex items-center justify-center mx-auto shadow-xl">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
 
@@ -351,15 +385,31 @@ export function ClientVisionModal({ isOpen, onClose }: ClientVisionModalProps) {
               </h2>
 
               <p className="text-zinc-600 text-sm font-light max-w-md mx-auto leading-relaxed">
-                Thank you, <span className="text-zinc-900 font-bold">{clientName}</span>. At ODA, we take time to understand before we create. Our team is now reviewing your responses and will reach out with a refined creative proposal.
+                Thank you, <span className="text-zinc-900 font-bold">{clientName}</span>. Your vision brief has been formatted and opened directly in WhatsApp, and saved for our creative directors.
               </p>
 
-              <button
-                onClick={resetAndClose}
-                className="px-8 py-3.5 rounded-full bg-black text-white font-semibold text-xs uppercase tracking-wider hover:bg-zinc-800 transition-all cursor-pointer"
-              >
-                Close Window
-              </button>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const message = formatVisionBriefForWhatsApp();
+                    const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '2348068957236';
+                    const cleanNumber = whatsappNumber.replace(/[^0-9]/g, '');
+                    window.open(`https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`, '_blank');
+                  }}
+                  className="px-6 py-3.5 rounded-full bg-green-600 text-white font-semibold text-xs uppercase tracking-wider hover:bg-green-700 transition-all flex items-center gap-2 shadow-md cursor-pointer"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Open Chat on WhatsApp</span>
+                </button>
+
+                <button
+                  onClick={resetAndClose}
+                  className="px-6 py-3.5 rounded-full bg-black text-white font-semibold text-xs uppercase tracking-wider hover:bg-zinc-800 transition-all cursor-pointer"
+                >
+                  Close Window
+                </button>
+              </div>
             </div>
           )}
         </motion.div>
