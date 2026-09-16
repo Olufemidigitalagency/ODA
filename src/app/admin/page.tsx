@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
-  Plus, Trash2, Eye, LogOut, Lock, Mail, Image as ImageIcon,
+  Plus, Trash2, Eye, EyeOff, LogOut, Lock, Mail, Image as ImageIcon,
   CheckCircle2, FolderKanban, MessageSquare, FileText, ArrowLeft, Star, Upload, Loader2,
   Video, Film, X, Edit3, RefreshCw, AlertTriangle
 } from 'lucide-react';
@@ -24,6 +24,7 @@ export default function AdminPage() {
   const [user, setUser] = useState<any>(null);
   const [authEmail, setAuthEmail] = useState('');
   const [authPassword, setAuthPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -638,13 +639,25 @@ export default function AdminPage() {
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
                   placeholder="••••••••"
                   value={authPassword}
                   onChange={(e) => setAuthPassword(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 focus:outline-none focus:border-black transition-colors text-sm"
+                  className="w-full pl-11 pr-11 py-3 rounded-xl bg-zinc-50 border border-zinc-200 text-zinc-900 focus:outline-none focus:border-black transition-colors text-sm"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-900 p-1 transition-colors cursor-pointer"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
               </div>
             </div>
 
