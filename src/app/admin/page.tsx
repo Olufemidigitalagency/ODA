@@ -158,6 +158,29 @@ export default function AdminPage() {
     setEditingReview(null);
   };
 
+  const isValidAdminCredentials = (email: string, pass: string) => {
+    const inputEmail = email.trim().toLowerCase();
+
+    // 1. Check ENV variables if set
+    const envEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL?.trim().toLowerCase();
+    const envPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+    if (envEmail && envPass && inputEmail === envEmail && pass === envPass) {
+      return true;
+    }
+
+    // 2. Check Master Owner credentials
+    if (inputEmail === 'femikolawole142@gmail.com' && pass === 'Olufemikolawole7236*') {
+      return true;
+    }
+
+    // 3. Check Agency default credentials
+    if (inputEmail === 'admin@oda.studio' && pass === 'admin123456') {
+      return true;
+    }
+
+    return false;
+  };
+
   // Handle Login / Sign Up
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -201,11 +224,7 @@ export default function AdminPage() {
           }
         }
       } catch (err: any) {
-        const validEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@oda.studio';
-        const validPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123456';
-
-        // Direct fallback to master admin login if credentials match
-        if (authEmail.trim().toLowerCase() === validEmail.toLowerCase() && authPassword === validPass) {
+        if (isValidAdminCredentials(authEmail, authPassword)) {
           setIsAuthenticated(true);
           sessionStorage.setItem('oda_admin_session', 'authenticated');
           setAuthError('');
@@ -220,10 +239,7 @@ export default function AdminPage() {
         setAuthLoading(false);
       }
     } else {
-      const validEmail = process.env.NEXT_PUBLIC_ADMIN_EMAIL || 'admin@oda.studio';
-      const validPass = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'admin123456';
-
-      if (authEmail.trim().toLowerCase() === validEmail.toLowerCase() && authPassword === validPass) {
+      if (isValidAdminCredentials(authEmail, authPassword)) {
         setIsAuthenticated(true);
         sessionStorage.setItem('oda_admin_session', 'authenticated');
       } else {
