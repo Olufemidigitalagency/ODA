@@ -132,14 +132,19 @@ export function HeroSection({ onOpenVisionModal }: HeroSectionProps) {
           </div>
 
           {/* Description Subtitle */}
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-zinc-600 text-lg md:text-2xl font-light max-w-2xl leading-relaxed pt-4"
+            className="space-y-2 pt-4 max-w-2xl"
           >
-            Your single media partner. We help brands refine their ideas and build a commanding online presence through photography, videography, content creation, and graphic design.
-          </motion.p>
+            <h2 className="text-zinc-900 text-lg md:text-xl font-bold uppercase tracking-wider font-mono">
+              What is ODA?
+            </h2>
+            <p className="text-zinc-600 text-base md:text-xl font-light leading-relaxed">
+              ODA (Olufemi Digital Agency) is a media agency that helps businesses and brands build a strong and professional presence online through quality visual media services.
+            </p>
+          </motion.div>
 
           {/* Action Buttons */}
           <motion.div
