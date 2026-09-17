@@ -182,10 +182,11 @@ ${details}`;
         {/* Footer Navigation & Brand Bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 pb-12 border-b border-zinc-200/80">
           <a href="#top" className="group">
-            <span className="text-4xl font-black uppercase font-mono tracking-tighter text-zinc-900 group-hover:tracking-widest transition-all duration-300">
-              ODA
-            </span>
-            <p className="text-xs text-zinc-500 font-mono mt-1 whitespace-nowrap font-medium">OLUFEMI DIGITAL AGENCY</p>
+            <img
+              src="/logo.png"
+              alt="Olufemi Digital Agency Logo"
+              className="h-12 md:h-14 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+            />
           </a>
 
           <div className="flex flex-wrap items-center gap-8 text-xs font-mono text-zinc-600 uppercase tracking-widest font-medium">

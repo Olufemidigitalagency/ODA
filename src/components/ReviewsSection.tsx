@@ -179,8 +179,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
             <motion.div
               key={review.id}
               initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-30px' }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: idx * 0.08 }}
               whileHover={{ y: -8, transition: { duration: 0.25 } }}
               className="w-[300px] sm:w-[380px] md:w-[420px] shrink-0 snap-start p-8 md:p-10 rounded-3xl bg-[#fafafa] border border-zinc-200/90 flex flex-col justify-between relative group hover:border-zinc-900 hover:bg-white transition-all duration-500 shadow-[0_4px_25px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)]"

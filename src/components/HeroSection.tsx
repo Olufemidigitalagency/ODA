@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { ArrowDownRight, MoveRight, Sparkles } from 'lucide-react';
 
 interface HeroSectionProps {
@@ -8,10 +8,72 @@ interface HeroSectionProps {
 }
 
 export function HeroSection({ onOpenVisionModal }: HeroSectionProps) {
+  const letters = [
+    { char: 'O', src: '/logo-letter-o.png', isDot: false },
+    { char: 'D', src: '/logo-letter-d.png', isDot: false },
+    { char: 'A', src: '/logo-letter-a.png', isDot: false },
+    { char: '.', src: '/logo-letter-dot.png', isDot: true },
+  ];
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const letterVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 90,
+      scale: 0.8,
+      filter: 'blur(12px)',
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      filter: 'blur(0px)',
+      transition: {
+        type: 'spring',
+        damping: 14,
+        stiffness: 100,
+      },
+    },
+  };
+
   return (
     <section id="top" className="relative min-h-screen pt-32 pb-20 px-6 md:px-12 flex flex-col justify-between overflow-hidden bg-white bg-noise">
-      {/* Background Subtle Ambient Soft Gradient */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[850px] bg-gradient-to-tr from-zinc-200/40 via-zinc-100/20 to-transparent rounded-full blur-[180px] pointer-events-none" />
+      {/* Background Micro-Dot Grid (Matching user design) */}
+      <div className="absolute inset-0 bg-dots opacity-60 pointer-events-none" />
+
+      {/* Large Giant Faint ODA Watermark in Background (Matching user design) */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden z-0">
+        <img
+          src="/logo.png"
+          alt=""
+          aria-hidden="true"
+          className="w-[92%] max-w-6xl object-contain opacity-[0.045]"
+        />
+      </div>
+
+      {/* Ambient Pulsing Futuristic Radial Glow */}
+      <motion.div
+        animate={{
+          scale: [1, 1.15, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[850px] bg-gradient-to-tr from-zinc-300/40 via-zinc-200/20 to-transparent rounded-full blur-[180px] pointer-events-none"
+      />
 
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center my-auto relative z-10">
         <div className="space-y-6">
@@ -23,29 +85,58 @@ export function HeroSection({ onOpenVisionModal }: HeroSectionProps) {
             className="flex items-center gap-2"
           >
             <span className="px-3.5 py-1.5 rounded-full bg-zinc-100 border border-zinc-200 text-[11px] font-mono uppercase tracking-[0.25em] text-zinc-700 font-semibold flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-zinc-900" />
+              <Sparkles className="w-3.5 h-3.5 text-zinc-900 animate-spin" style={{ animationDuration: '6s' }} />
               OLUFEMI DIGITAL AGENCY
             </span>
           </motion.div>
 
-          {/* Iconic Giant ODA Block Title with Framer Animation */}
-          <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="relative"
-          >
-            <h1 className="text-[7.5rem] sm:text-[11rem] md:text-[15rem] lg:text-[18rem] xl:text-[20rem] font-black tracking-tighter uppercase leading-[0.82] text-zinc-900 select-none">
-              ODA<span className="text-zinc-300 font-serif font-light">.</span>
-            </h1>
-          </motion.div>
+          {/* Futuristic Block ODA Animation using Exact Logo Lettermarks */}
+          <div className="relative inline-block py-2">
+            <motion.h1
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="flex items-end gap-3 sm:gap-5 md:gap-8 lg:gap-10 select-none"
+            >
+              {letters.map((item, index) => (
+                <motion.div
+                  key={index}
+                  variants={letterVariants}
+                  whileHover={{
+                    y: -16,
+                    scale: 1.05,
+                    transition: { type: 'spring', stiffness: 300 },
+                  }}
+                  className="inline-block cursor-default"
+                >
+                  <img
+                    src={item.src}
+                    alt={item.char}
+                    className={
+                      item.isDot
+                        ? 'h-[2.8rem] sm:h-[4.2rem] md:h-[6.2rem] lg:h-[7.8rem] xl:h-[9rem] w-auto object-contain mb-1 sm:mb-2 md:mb-3'
+                        : 'h-[5.5rem] sm:h-[8.5rem] md:h-[12.5rem] lg:h-[15.5rem] xl:h-[18rem] w-auto object-contain'
+                    }
+                  />
+                </motion.div>
+              ))}
+            </motion.h1>
+
+            {/* Futuristic Underline Scanning Laser Accent */}
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 1.2, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="h-1.5 w-full bg-gradient-to-r from-zinc-900 via-zinc-400 to-zinc-900 rounded-full origin-left mt-2"
+            />
+          </div>
 
           {/* Description Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.25 }}
-            className="text-zinc-600 text-lg md:text-2xl font-light max-w-2xl leading-relaxed pt-2"
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="text-zinc-600 text-lg md:text-2xl font-light max-w-2xl leading-relaxed pt-4"
           >
             Your single media partner. We help brands refine their ideas and build a commanding online presence through photography, videography, content creation, and graphic design.
           </motion.p>
@@ -54,7 +145,7 @@ export function HeroSection({ onOpenVisionModal }: HeroSectionProps) {
           <motion.div
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35 }}
+            transition={{ duration: 0.8, delay: 0.95 }}
             className="flex flex-wrap items-center gap-4 pt-4"
           >
             <button
@@ -80,7 +171,7 @@ export function HeroSection({ onOpenVisionModal }: HeroSectionProps) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
+        transition={{ duration: 0.8, delay: 1.1 }}
         className="max-w-7xl mx-auto w-full pt-16 border-t border-zinc-200/80 grid grid-cols-2 md:grid-cols-4 gap-6 font-mono text-zinc-600 text-xs relative z-10"
       >
         <div>

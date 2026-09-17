@@ -613,7 +613,7 @@ export default function AdminPage() {
           className="max-w-md w-full bg-white border border-zinc-200 rounded-3xl p-8 shadow-2xl space-y-6"
         >
           <div className="text-center">
-            <span className="font-mono text-3xl font-black tracking-widest text-zinc-900">ODA</span>
+            <img src="/logo.png" alt="Olufemi Digital Agency Logo" className="h-12 w-auto mx-auto mb-3 object-contain" />
             <h1 className="text-xl font-bold uppercase text-zinc-900 mt-2">
               {isSignUpMode ? 'REGISTER ADMIN ACCOUNT' : 'ADMIN PORTAL LOGIN'}
             </h1>
@@ -722,11 +722,9 @@ export default function AdminPage() {
       <header className="border-b border-zinc-200 glass-header sticky top-0 z-40 px-6 md:px-12 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-full border border-zinc-300 flex items-center justify-center p-0.5">
-                <img src="/logo-circle.png" alt="ODA" className="w-full h-full object-cover rounded-full" />
-              </div>
-              <span className="font-black font-mono text-xl uppercase tracking-tighter text-zinc-900">ODA ADMIN</span>
+            <Link href="/" className="flex items-center gap-3 group">
+              <img src="/logo.png" alt="ODA" className="h-8 w-auto object-contain" />
+              <span className="font-black font-mono text-xs uppercase tracking-widest text-zinc-500 border-l border-zinc-300 pl-3">ADMIN</span>
             </Link>
           </div>
 

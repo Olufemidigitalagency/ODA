@@ -30,17 +30,15 @@ export function Navbar({ onOpenVisionModal }: NavbarProps) {
         className="fixed top-0 left-0 right-0 z-50 glass-header px-6 md:px-12 py-4"
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Brand Logo Link with Circular Emblem */}
-          <a href="#top" className="flex items-center gap-3 group cursor-pointer">
-            <div className="w-9 h-9 rounded-full glass-card border border-zinc-300 flex items-center justify-center overflow-hidden p-0.5 group-hover:border-black transition-colors duration-300">
-              <img
-                src="/logo-circle.png"
-                alt="ODA Logo"
-                className="w-full h-full object-cover rounded-full group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <span className="text-2xl md:text-3xl font-black tracking-tighter uppercase font-mono text-zinc-900 group-hover:tracking-widest transition-all duration-300">
-              ODA
+          {/* Brand Logo Link */}
+          <a href="#top" className="flex flex-col items-start group cursor-pointer">
+            <img
+              src="/logo.png"
+              alt="Olufemi Digital Agency Logo"
+              className="h-7 sm:h-9 md:h-11 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+            />
+            <span className="text-[8px] sm:text-[9px] md:text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-600 font-semibold mt-0.5 leading-none">
+              OLUFEMI DIGITAL AGENCY
             </span>
           </a>
 

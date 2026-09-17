@@ -14,7 +14,7 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+    font-family: var(--font-jakarta), var(--font-inter), system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
   }
 
@@ -22,6 +22,12 @@
     font-family: var(--font-cormorant), Georgia, serif;
     letter-spacing: -0.01em;
   }
+}
+
+/* Micro-Dot Grid Pattern (Matching media_1789661866311) */
+.bg-dots {
+  background-image: radial-gradient(rgba(9, 9, 11, 0.12) 1.2px, transparent 1.2px);
+  background-size: 20px 20px;
 }
 
 /* Custom Utilities for Stark White Luxury Design */

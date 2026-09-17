@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { Inter, Cormorant_Garamond } from 'next/font/google';
+import { Plus_Jakarta_Sans, Cormorant_Garamond } from 'next/font/google';
 import './globals.css';
 
-const inter = Inter({
+const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  variable: '--font-inter',
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-jakarta',
   display: 'swap',
 });
 
@@ -19,9 +20,9 @@ export const metadata: Metadata = {
   title: 'ODA — Olufemi Digital Agency',
   description: 'High-contrast luxury creative agency crafting bespoke photography, videography, content creation, and graphic design.',
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/logo-circle.png',
-    apple: '/logo-circle.png',
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
   },
 };
 
@@ -31,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${cormorant.variable} light scroll-smooth`}>
+    <html lang="en" className={`${jakarta.variable} ${cormorant.variable} light scroll-smooth`}>
       <body className="bg-white text-zinc-900 antialiased font-sans">
         {children}
       </body>

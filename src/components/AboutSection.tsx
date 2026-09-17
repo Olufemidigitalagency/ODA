@@ -39,7 +39,7 @@ export function AboutSection({ onOpenVisionModal }: { onOpenVisionModal: () => v
           <span className="text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-mono text-zinc-500 font-semibold whitespace-nowrap">ABOUT OLUFEMI DIGITAL AGENCY</span>
           <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase text-zinc-900 leading-tight">
             WE DON'T JUST CREATE. <br />
-            <span className="text-stroke">WE UNDERSTAND.</span>
+            <span className="text-zinc-400">WE UNDERSTAND.</span>
           </h2>
           <p className="text-zinc-600 text-sm md:text-base font-light leading-relaxed">
             ODA (Olufemi Digital Agency) is a full-service creative media agency. We use photography, videography, content creation, and graphic design as strategic tools to build a strong, professional online presence for your brand.
@@ -50,8 +50,8 @@ export function AboutSection({ onOpenVisionModal }: { onOpenVisionModal: () => v
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
             className="p-8 md:p-12 rounded-3xl bg-white border border-zinc-200/90 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-lg transition-all duration-300 relative overflow-hidden group"
           >
             <div className="flex items-center justify-between mb-6">
@@ -68,9 +68,8 @@ export function AboutSection({ onOpenVisionModal }: { onOpenVisionModal: () => v
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
             className="p-8 md:p-12 rounded-3xl bg-white border border-zinc-200/90 shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-lg transition-all duration-300 relative overflow-hidden group"
           >
             <div className="flex items-center justify-between mb-6">
@@ -111,8 +110,7 @@ export function AboutSection({ onOpenVisionModal }: { onOpenVisionModal: () => v
                 <motion.div
                   key={diff.num}
                   initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className="p-7 rounded-2xl bg-white border border-zinc-200/90 shadow-[0_4px_20px_rgb(0,0,0,0.02)] hover:border-zinc-400 hover:shadow-md transition-all duration-300 flex flex-col justify-between group"
                 >
